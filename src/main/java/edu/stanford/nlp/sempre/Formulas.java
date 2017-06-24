@@ -7,6 +7,8 @@ import fig.basic.LispTree;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Utilities for working with Formulas.
@@ -23,24 +25,26 @@ public abstract class Formulas {
             return new ValueFormula<Value>(value);
 
         String func = tree.child(0).value;
-
-        switch (func) {
-            case "var":
-                return new VariableFormula(tree.child(1).value);
-            case "lambda":
-                return new LambdaFormula(tree.child(1).value, fromLispTree(tree.child(2)));
-            case "mark":
-                return new MarkFormula(tree.child(1).value, fromLispTree(tree.child(2)));
-            case "not":
-                return new NotFormula(fromLispTree(tree.child(1)));
-            case "reverse":
-                return new ReverseFormula(fromLispTree(tree.child(1)));
-            case "call": {
-                Formula callFunc = fromLispTree(tree.child(1));
-                List<Formula> args = Lists.newArrayList();
-                for (int i = 2; i < tree.children.size(); i++)
-                    args.add(fromLispTree(tree.child(i)));
-                return new CallFormula(callFunc, args);
+        if (func!=null) {
+            switch (func) {
+                case "var":
+                    return new VariableFormula(tree.child(1).value);
+                case "lambda":
+                    return new LambdaFormula(tree.child(1).value, fromLispTree(tree.child(2)));
+                case "mark":
+                    return new MarkFormula(tree.child(1).value, fromLispTree(tree.child(2)));
+                case "not":
+                    return new NotFormula(fromLispTree(tree.child(1)));
+                case "reverse":
+                    return new ReverseFormula(fromLispTree(tree.child(1)));
+                case "call": {
+                    Formula callFunc = fromLispTree(tree.child(1));
+                    List<Formula> args = IntStream
+                            .range(2, tree.children.size())
+                            .mapToObj(i -> fromLispTree(tree.child(i)))
+                            .collect(Collectors.toList());
+                    return new CallFormula(callFunc, args);
+                }
             }
         }
 

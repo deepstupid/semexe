@@ -7,6 +7,7 @@ import fig.basic.*;
 import jline.console.ConsoleReader;
 
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -432,35 +433,39 @@ public class Master {
     // Read the module-classes.txt file, which specifies which classes are
     // associated with each module.
     List<Object> args = new ArrayList<Object>();
-    for (String line : IOUtils.readLinesHard("module-classes.txt")) {
+    try {
+      for (String line : IOUtils.readLinesHard("module-classes.txt")) {
 
-      // Example: core edu.stanford.nlp.sempre.Grammar
-      String[] tokens = line.split(" ");
-      if (tokens.length != 2) throw new RuntimeException("Invalid: " + line);
-      String module = tokens[0];
-      String className = tokens[1];
-      if (!modules.contains(tokens[0])) continue;
+        // Example: core edu.stanford.nlp.sempre.Grammar
+        String[] tokens = line.split(" ");
+        if (tokens.length != 2) throw new RuntimeException("Invalid: " + line);
+        String module = tokens[0];
+        String className = tokens[1];
+        if (!modules.contains(tokens[0])) continue;
 
-      // Group (e.g., Grammar)
-      String[] classNameTokens = className.split("\\.");
-      String group = classNameTokens[classNameTokens.length - 1];
+        // Group (e.g., Grammar)
+        String[] classNameTokens = className.split("\\.");
+        String group = classNameTokens[classNameTokens.length - 1];
 
-      // Object (e.g., Grammar.opts)
-      Object opts = null;
-      try {
-        for (Field field : Class.forName(className).getDeclaredFields()) {
-          if (!"opts".equals(field.getName())) continue;
-          opts = field.get(null);
+        // Object (e.g., Grammar.opts)
+        Object opts = null;
+        try {
+          for (Field field : Class.forName(className).getDeclaredFields()) {
+            if (!"opts".equals(field.getName())) continue;
+            opts = field.get(null);
+          }
+        } catch (Throwable t) {
+          System.out.println("Problem processing: " + line);
+          throw new RuntimeException(t);
         }
-      } catch (Throwable t) {
-        System.out.println("Problem processing: " + line);
-        throw new RuntimeException(t);
-      }
 
-      if (opts != null) {
-        args.add(group);
-        args.add(opts);
+        if (opts != null) {
+          args.add(group);
+          args.add(opts);
+        }
       }
+    } catch (Exception err) {
+      //TODO avoid needing that file
     }
 
     parser.registerAll(args.toArray(new Object[0]));

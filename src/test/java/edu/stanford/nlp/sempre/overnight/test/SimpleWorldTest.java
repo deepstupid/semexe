@@ -17,7 +17,7 @@ import fig.basic.*;
 public class SimpleWorldTest {
   @Test public void externalWorldTest() {
     edu.stanford.nlp.sempre.overnight.SimpleWorld.opts.domain = "external";
-    edu.stanford.nlp.sempre.overnight.SimpleWorld.opts.dbPath = "lib/data/overnight/test/unittest.db";
+    edu.stanford.nlp.sempre.overnight.SimpleWorld.opts.dbPath = "lib/data/overnight/unittest.db";
     edu.stanford.nlp.sempre.overnight.SimpleWorld.opts.verbose = 1;
     edu.stanford.nlp.sempre.overnight.SimpleWorld.recreateWorld();
 

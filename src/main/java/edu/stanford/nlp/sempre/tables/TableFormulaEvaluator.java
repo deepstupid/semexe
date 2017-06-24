@@ -9,10 +9,9 @@ import com.google.common.cache.*;
 import edu.stanford.nlp.sempre.*;
 import edu.stanford.nlp.sempre.tables.serialize.LazyLoadedExampleList;
 import edu.stanford.nlp.sempre.tables.serialize.SerializedDataset;
-import edu.stanford.nlp.sempre.tables.test.CustomExample;
 import edu.stanford.nlp.sempre.tables.test.TableFormulaCanonicalizer;
-import edu.stanford.nlp.sempre.tables.test.CustomExample.ExampleProcessor;
 import fig.basic.*;
+import edu.stanford.nlp.sempre.tables.test.CustomExample;
 
 /**
  * Evaluate if the predicted formula matches one of the annotated formulas.
@@ -79,7 +78,7 @@ public class TableFormulaEvaluator extends TableValueEvaluator {
   protected void readAnnotationFile() {
     LogInfo.begin_track("Reading annotated examples");
     idToTargetFormulas = new HashMap<>();
-    CustomExample.getDataset(Arrays.asList(new Pair<>("annotated", opts.annotationPath)), new ExampleProcessor() {
+    CustomExample.getDataset(Arrays.asList(new Pair<>("annotated", opts.annotationPath)), new CustomExample.ExampleProcessor() {
       @Override
       public void run(CustomExample ex) {
         List<Formula> targetFormulas = new ArrayList<>();
