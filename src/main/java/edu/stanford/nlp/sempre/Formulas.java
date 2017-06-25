@@ -19,13 +19,13 @@ public abstract class Formulas {
     public static Formula fromLispTree(LispTree tree) {
         // Try to interpret as ValueFormula
         if (tree.isLeaf())  // Leaves are name values
-            return new ValueFormula<NameValue>(new NameValue(tree.value, null));
+            return new ValueFormula<>(new NameValue(tree.value, null));
         Value value = Values.fromLispTreeOrNull(tree);  // General case
         if (value != null)
-            return new ValueFormula<Value>(value);
+            return new ValueFormula<>(value);
 
         String func = tree.child(0).value;
-        if (func!=null) {
+        if (func != null) {
             switch (func) {
                 case "var":
                     return new VariableFormula(tree.child(1).value);
@@ -47,7 +47,6 @@ public abstract class Formulas {
                 }
             }
         }
-
 
 
         { // Merge: (and (fb:type.object.type fb:people.person) (fb:people.person.children fb:en.barack_obama))
@@ -116,7 +115,7 @@ public abstract class Formulas {
     // Replace occurrences of the variable reference |var| with |formula|.
     public static Formula substituteVar(Formula formula, final String var, final Formula replaceFormula) {
         return formula.map(
-                new Function<Formula, Formula>() {
+                new Function<>() {
                     public Formula apply(Formula formula) {
                         if (formula instanceof VariableFormula) {  // Replace variable
                             String name = ((VariableFormula) formula).name;
@@ -133,7 +132,7 @@ public abstract class Formulas {
     // Replace top-level occurrences of |searchFormula| inside |formula| with |replaceFormula|.
     public static Formula substituteFormula(Formula formula, final Formula searchFormula, final Formula replaceFormula) {
         return formula.map(
-                new Function<Formula, Formula>() {
+                new Function<>() {
                     public Formula apply(Formula formula) {
                         if (formula.equals(searchFormula)) return replaceFormula;
                         return null;
@@ -149,7 +148,7 @@ public abstract class Formulas {
     // Apply all the nested LambdaFormula's.
     public static Formula betaReduction(Formula formula) {
         return formula.map(
-                new Function<Formula, Formula>() {
+                new Function<>() {
                     public Formula apply(Formula formula) {
                         if (formula instanceof JoinFormula) {
                             Formula relation = betaReduction(((JoinFormula) formula).relation);
@@ -249,7 +248,7 @@ public abstract class Formulas {
             if (value instanceof NameValue)
                 return ((NameValue) value).id;
             if (value instanceof NumberValue)
-                return ((NumberValue) value).value + "";
+                return String.valueOf(((NumberValue) value).value);
         } else if (formula instanceof VariableFormula) {
             return ((VariableFormula) formula).name;
         }
@@ -300,7 +299,7 @@ public abstract class Formulas {
     }
 
     public static ValueFormula<NameValue> newNameFormula(String id) {
-        return new ValueFormula<NameValue>(new NameValue(id));
+        return new ValueFormula<>(new NameValue(id));
     }
 
     /*
@@ -308,7 +307,7 @@ public abstract class Formulas {
      * TODO(joberant): replace this with Formulas.map
      */
     public static Set<String> extractSubparts(Formula f) {
-        Set<String> res = new HashSet<String>();
+        Set<String> res = new HashSet<>();
         extractSubpartsRecursive(f, res);
         return res;
     }
@@ -405,7 +404,7 @@ public abstract class Formulas {
 
     // Try to simplify reverse subformulas within the specified formula
     public static Formula simplifyReverses(Formula formula) {
-        return formula.map(new Function<Formula, Formula>() {
+        return formula.map(new Function<>() {
             public Formula apply(Formula formula) {
                 if (formula instanceof ReverseFormula)
                     return reverseFormula(((ReverseFormula) formula).child);

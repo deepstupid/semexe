@@ -6,13 +6,13 @@ package edu.stanford.nlp.sempre;
  * right now.
  */
 public class FormulaMatchExecutor extends Executor {
-  public Response execute(Formula formula, ContextValue context) {
-    formula = Formulas.betaReduction(formula);
-    Value value;
-    if (formula instanceof ValueFormula)
-      value = ((ValueFormula) formula).value;
-    else
-      value = new StringValue(formula.toLispTree().toString());
-    return new Response(value);
-  }
+    public Response execute(Formula formula, ContextValue context) {
+        formula = Formulas.betaReduction(formula);
+        Value value;
+        if (formula instanceof ValueFormula)
+            value = ((ValueFormula) formula).value;
+        else
+            value = new StringValue(formula.toLispTree().toString());
+        return new Response(value);
+    }
 }

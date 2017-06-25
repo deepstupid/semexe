@@ -1,47 +1,63 @@
 package edu.stanford.nlp.sempre.tables.lambdadcs;
 
-import edu.stanford.nlp.sempre.*;
+import edu.stanford.nlp.sempre.AggregateFormula;
+import edu.stanford.nlp.sempre.Value;
 import fig.basic.LispTree;
 
 /**
  * Represents a UnaryDenotation or a MappingDenotation.
- *
+ * <p>
  * The following operations must be handled:
  * - Map
- *   - count(UL)
- *   - Aggregate: sum(UL), ...
+ * - count(UL)
+ * - Aggregate: sum(UL), ...
  * - Combine
- *   - Merge: and(UL1, UL2), ...
- *   - Arithmetic: sub(UL1, UL2), ...
- *
+ * - Merge: and(UL1, UL2), ...
+ * - Arithmetic: sub(UL1, UL2), ...
+ * <p>
  * Compose operations (join, superlative) are handled in BL.
  *
  * @author ppasupat
  */
 public interface Unarylike {
 
-  public LispTree toLispTree();
-  public Value toValue();
+    LispTree toLispTree();
 
-  /** Return the name of the free variable. */
-  public String getDomainVar();
+    Value toValue();
 
-  /** List of possible variable assignments */
-  public UnaryDenotation domain();
+    /**
+     * Return the name of the free variable.
+     */
+    String getDomainVar();
 
-  /** List of possible values. */
-  public UnaryDenotation range();
+    /**
+     * List of possible variable assignments
+     */
+    UnaryDenotation domain();
 
-  /** |key| => ??? */
-  public UnaryDenotation get(Value key);
+    /**
+     * List of possible values.
+     */
+    UnaryDenotation range();
 
-  /** ??? => |value| */
-  public UnaryDenotation inverseGet(Value value);
+    /**
+     * |key| => ???
+     */
+    UnaryDenotation get(Value key);
 
-  /** count and other aggregate operations */
-  public Unarylike aggregate(AggregateFormula.Mode mode);
+    /**
+     * ??? => |value|
+     */
+    UnaryDenotation inverseGet(Value value);
 
-  /** Return a new Unarylike where only the values found in |upperBound|
-   * and domain values found in |domainUpperBound| are kept */
-  public Unarylike filter(UnaryDenotation upperBound, UnaryDenotation domainUpperBound);
+    /**
+     * count and other aggregate operations
+     */
+    Unarylike aggregate(AggregateFormula.Mode mode);
+
+    /**
+     * Return a new Unarylike where only the values found in |upperBound|
+     * and domain values found in |domainUpperBound| are kept
+     */
+    Unarylike filter(UnaryDenotation upperBound, UnaryDenotation domainUpperBound);
 }

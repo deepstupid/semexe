@@ -8,17 +8,25 @@ import fig.basic.LispTree;
  * @author Percy Liang
  */
 public class VariableFormula extends PrimitiveFormula {
-  public final String name;  // Name of variable.
-  public VariableFormula(String name) { this.name = name; }
-  public LispTree toLispTree() { return LispTree.proto.newList("var", name); }
+    public final String name;  // Name of variable.
 
-  @SuppressWarnings({"equalshashcode"})
-  @Override
-  public boolean equals(Object thatObj) {
-    if (!(thatObj instanceof VariableFormula)) return false;
-    VariableFormula that = (VariableFormula) thatObj;
-    return this.name.equals(that.name);
-  }
+    public VariableFormula(String name) {
+        this.name = name;
+    }
 
-  public int computeHashCode() { return name.hashCode(); }
+    public LispTree toLispTree() {
+        return LispTree.proto.newList("var", name);
+    }
+
+    @SuppressWarnings({"equalshashcode"})
+    @Override
+    public boolean equals(Object thatObj) {
+        if (!(thatObj instanceof VariableFormula)) return false;
+        VariableFormula that = (VariableFormula) thatObj;
+        return this.name.equals(that.name);
+    }
+
+    public int computeHashCode() {
+        return name.hashCode();
+    }
 }

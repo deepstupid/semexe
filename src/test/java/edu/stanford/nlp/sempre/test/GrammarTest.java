@@ -2,10 +2,12 @@ package edu.stanford.nlp.sempre.test;
 
 import edu.stanford.nlp.sempre.Grammar;
 import edu.stanford.nlp.sempre.Rule;
-import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.util.List;
+
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 /**
  * Test that the grammar correctly parsers rules.
@@ -31,7 +33,7 @@ public class GrammarTest {
      * $Cat => $Cat token
      * $Cat => $Cat $Cat
      */
-    public boolean isValidBinaryGrammar(Grammar g) {
+    public static boolean isValidBinaryGrammar(Grammar g) {
         for (Rule rule : g.getRules()) {
             if (!Rule.isCat(rule.lhs)) return false;
             if (rule.rhs.size() != 1 && rule.rhs.size() != 2) return false;
@@ -42,12 +44,18 @@ public class GrammarTest {
 
     @Test
     public void testBinarizationOfTernaryGrammar() {
-        Grammar g = makeTernaryGrammar();
-        List<Rule> rules = g.getRules();
-        Assert.assertEquals(6, rules.size());
-        Assert.assertTrue(isValidBinaryGrammar(g));
-    }
 
+        Grammar g = makeTernaryGrammar();
+        System.out.println(g.toString());
+
+        List<Rule> rules = g.getRules();
+        System.out.println(rules.toString());
+
+        assertTrue(isValidBinaryGrammar(g));
+
+        assertEquals(6, rules.size());
+
+    }
 
 
 }

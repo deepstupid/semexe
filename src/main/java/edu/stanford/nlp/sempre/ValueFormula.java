@@ -9,25 +9,27 @@ import fig.basic.LispTree;
  * @author Percy Liang
  */
 public class ValueFormula<T extends Value> extends PrimitiveFormula {
-  public final T value;
+    public final T value;
 
-  public ValueFormula(T value) { this.value = value; }
-  public LispTree toLispTree() {
-    if (value instanceof NameValue) return LispTree.proto.newLeaf(((NameValue) value).id);
-    return value.toLispTree();
-  }
+    public ValueFormula(T value) {
+        this.value = value;
+    }
 
-  @SuppressWarnings({"equalshashcode"})
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    ValueFormula<?> that = (ValueFormula<?>) o;
-    if (!value.equals(that.value)) return false;
-    return true;
-  }
+    public LispTree toLispTree() {
+        if (value instanceof NameValue) return LispTree.proto.newLeaf(((NameValue) value).id);
+        return value.toLispTree();
+    }
 
-  public int computeHashCode() {
-    return value.hashCode();
-  }
+    @SuppressWarnings({"equalshashcode"})
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ValueFormula<?> that = (ValueFormula<?>) o;
+        return value.equals(that.value);
+    }
+
+    public int computeHashCode() {
+        return value.hashCode();
+    }
 }

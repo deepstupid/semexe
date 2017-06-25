@@ -8,6 +8,7 @@ import java.util.Iterator;
  * Created by joberant on 3/14/14.
  */
 public interface DerivationStream extends Iterator<Derivation> {
-  Derivation peek();
-  int estimatedSize();
+    Derivation peek();
+
+    int estimatedSize();
 }

@@ -6,10 +6,10 @@ import org.tartarus.snowball.ext.PorterStemmer;
  * Wrapper for the default stemmer used by this project.
  */
 public class Stemmer {
-  public String stem(String input) {
-    PorterStemmer state = new PorterStemmer();
-    state.setCurrent(input);
-    state.stem();
-    return state.getCurrent();
-  }
+    public static String stem(String input) {
+        PorterStemmer state = new PorterStemmer();
+        state.setCurrent(input);
+        state.stem();
+        return state.getCurrent();
+    }
 }

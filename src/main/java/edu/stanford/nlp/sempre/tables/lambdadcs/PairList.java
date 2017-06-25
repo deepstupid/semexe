@@ -1,37 +1,50 @@
 package edu.stanford.nlp.sempre.tables.lambdadcs;
 
-import edu.stanford.nlp.sempre.*;
+import edu.stanford.nlp.sempre.AggregateFormula;
+import edu.stanford.nlp.sempre.PairListValue;
+import edu.stanford.nlp.sempre.Value;
 import fig.basic.LispTree;
 
 public interface PairList {
 
-  // ============================================================
-  // Representation
-  // ============================================================
+    // ============================================================
+    // Representation
+    // ============================================================
 
-  public String toString();
-  public LispTree toLispTree();
-  public PairListValue toValue();
+    String toString();
 
-  // ============================================================
-  // Getter
-  // ============================================================
+    LispTree toLispTree();
 
-  public UnaryDenotation domain();
-  public UnaryDenotation range();
-  public UnaryDenotation get(Value key);
-  public UnaryDenotation inverseGet(Value value);
+    PairListValue toValue();
 
-  // ============================================================
-  // Operations
-  // ============================================================
+    // ============================================================
+    // Getter
+    // ============================================================
 
-  public PairList aggregate(AggregateFormula.Mode mode);
-  public PairList filter(UnaryDenotation upperBound, UnaryDenotation domainUpperBound);
-  public PairList reverse();
-  public UnaryDenotation joinOnKey(UnaryDenotation keys);
-  public UnaryDenotation joinOnValue(UnaryDenotation values);
-  public ExplicitPairList explicitlyFilterOnKey(UnaryDenotation keys);
-  public ExplicitPairList explicitlyFilterOnValue(UnaryDenotation values);
+    UnaryDenotation domain();
+
+    UnaryDenotation range();
+
+    UnaryDenotation get(Value key);
+
+    UnaryDenotation inverseGet(Value value);
+
+    // ============================================================
+    // Operations
+    // ============================================================
+
+    PairList aggregate(AggregateFormula.Mode mode);
+
+    PairList filter(UnaryDenotation upperBound, UnaryDenotation domainUpperBound);
+
+    PairList reverse();
+
+    UnaryDenotation joinOnKey(UnaryDenotation keys);
+
+    UnaryDenotation joinOnValue(UnaryDenotation values);
+
+    ExplicitPairList explicitlyFilterOnKey(UnaryDenotation keys);
+
+    ExplicitPairList explicitlyFilterOnValue(UnaryDenotation values);
 
 }

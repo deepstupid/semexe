@@ -6,7 +6,8 @@ package edu.stanford.nlp.sempre.cache;
  * @author Percy Liang
  */
 public interface StringCache {
-  String get(String key);
-  void put(String key, String value);
+    String get(String key);
+
+    void put(String key, String value);
 }
 
