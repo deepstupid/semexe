@@ -86,7 +86,7 @@ public class ExplicitPairList implements PairList {
         for (Pair<Value, Value> pair : pairs) {
             Value first = pair.getFirst(), second = pair.getSecond();
             tree.addChild(LispTree.proto.newList(
-                    first == null ? NULL_LEAF : first.toLispTree(), second == null ? NULL_LEAF : second.toLispTree()));
+                    first == null ? NULL_LEAF : first.tree(), second == null ? NULL_LEAF : second.tree()));
         }
         return tree;
     }

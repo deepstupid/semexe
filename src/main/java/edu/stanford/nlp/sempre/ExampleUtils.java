@@ -59,7 +59,7 @@ public final class ExampleUtils {
         for (Example ex : examples) {
             out.println("");
             out.println("example " + ex.id);
-            out.println("description " + p.L(p.L("utterance", ex.utterance), p.L("targetValue", ex.targetValue.toLispTree()), p.L("evaluation", ex.evaluation.toLispTree())));
+            out.println("description " + p.L(p.L("utterance", ex.utterance), p.L("targetValue", ex.targetValue.tree()), p.L("evaluation", ex.evaluation.toLispTree())));
 
             if (outputPredDerivations) {
                 for (Derivation deriv : ex.predDerivations) {
@@ -69,7 +69,7 @@ public final class ExampleUtils {
                     if (deriv.canonicalUtterance != null)
                         description.addChild(p.L("canonicalUtterance", deriv.canonicalUtterance));
                     description.addChild(p.L("formula", deriv.formula.toLispTree()));
-                    description.addChild(p.L("value", deriv.value.toLispTree()));
+                    description.addChild(p.L("value", deriv.value.tree()));
                     buf.append("\t").append(description);
                     buf.append("\t").append(deriv.compatibility);
                     Map<String, Double> features = deriv.getAllFeatureVector();

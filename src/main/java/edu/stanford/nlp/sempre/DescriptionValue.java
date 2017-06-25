@@ -19,7 +19,7 @@ public class DescriptionValue extends Value {
         this.value = value;
     }
 
-    public LispTree toLispTree() {
+    public LispTree tree() {
         LispTree tree = LispTree.proto.newList();
         tree.addChild("description");
         tree.addChild(value);

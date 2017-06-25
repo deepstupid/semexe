@@ -71,7 +71,7 @@ public class CustomExample extends Example {
                 b.setUtterance(arg.child(1).value);
             } else if ("targetFormula".equals(label)) {
                 LispTree canonicalized = canonicalizeFormula(arg.child(1));
-                b.setTargetFormula(Formulas.fromLispTree(canonicalized));
+                b.setTargetFormula(Formulas.formula(canonicalized));
             } else if ("targetValue".equals(label) || "targetValues".equals(label)) {
                 if (arg.children.size() != 2)
                     throw new RuntimeException("Expect one target value");
@@ -95,7 +95,7 @@ public class CustomExample extends Example {
                 ex.errors.add(arg.child(1).value);
             } else if ("alternativeFormula".equals(label)) {
                 LispTree canonicalized = canonicalizeFormula(arg.child(1));
-                ex.alternativeFormulas.add(Formulas.fromLispTree(canonicalized));
+                ex.alternativeFormulas.add(Formulas.formula(canonicalized));
             } else if (!usefulTags.contains(label)) {
                 throw new RuntimeException("Invalid example argument: " + arg);
             }

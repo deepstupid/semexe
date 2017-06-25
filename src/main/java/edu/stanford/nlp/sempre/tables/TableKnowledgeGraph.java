@@ -277,7 +277,7 @@ public class TableKnowledgeGraph extends KnowledgeGraph implements FuzzyMatchabl
             }
             return tree;
         }
-        return toTableValue().toLispTree();
+        return toTableValue().tree();
     }
 
     @Override

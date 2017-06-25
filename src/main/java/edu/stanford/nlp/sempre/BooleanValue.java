@@ -18,7 +18,7 @@ public class BooleanValue extends Value {
         this.value = Boolean.parseBoolean(tree.child(1).value);
     }
 
-    public LispTree toLispTree() {
+    public LispTree tree() {
         LispTree tree = LispTree.proto.newList();
         tree.addChild("boolean");
         tree.addChild(String.valueOf(value));

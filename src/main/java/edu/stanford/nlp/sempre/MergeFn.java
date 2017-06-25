@@ -18,7 +18,7 @@ public class MergeFn extends SemanticFn {
         super.init(tree);
         mode = MergeFormula.parseMode(tree.child(1).value);
         if (tree.children.size() == 3) {
-            formula = Formulas.fromLispTree(tree.child(2));
+            formula = Formulas.formula(tree.child(2));
         }
     }
 

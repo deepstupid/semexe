@@ -27,8 +27,14 @@ public class SuperlativeFormula extends Formula {
     }
 
     public static Mode parseMode(String mode) {
-        if ("argmin".equals(mode)) return Mode.argmin;
-        if ("argmax".equals(mode)) return Mode.argmax;
+        if (mode!=null) {
+            switch (mode) {
+                case "argmin":
+                    return Mode.argmin;
+                case "argmax":
+                    return Mode.argmax;
+            }
+        }
         return null;
     }
 

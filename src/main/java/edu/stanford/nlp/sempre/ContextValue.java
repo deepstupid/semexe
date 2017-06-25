@@ -43,18 +43,24 @@ public class ContextValue extends Value {
         DateValue date = null;
         KnowledgeGraph graph = null;
         exchanges = new ArrayList<>();
-        for (int i = 1; i < tree.children.size(); i++) {
+        int n = tree.children.size();
+        for (int i = 1; i < n; i++) {
             String key = tree.child(i).child(0).value;
-            if (key.equals("user")) {
-                user = tree.child(i).child(1).value;
-            } else if (key.equals("date")) {
-                date = new DateValue(tree.child(i));
-            } else if (key.equals("graph")) {
-                graph = KnowledgeGraph.fromLispTree(tree.child(i));
-            } else if (key.equals("exchange")) {
-                exchanges.add(new Exchange(tree.child(i)));
-            } else {
-                throw new RuntimeException("Invalid: " + tree.child(i));
+            switch (key) {
+                case "user":
+                    user = tree.child(i).child(1).value;
+                    break;
+                case "date":
+                    date = new DateValue(tree.child(i));
+                    break;
+                case "graph":
+                    graph = KnowledgeGraph.fromLispTree(tree.child(i));
+                    break;
+                case "exchange":
+                    exchanges.add(new Exchange(tree.child(i)));
+                    break;
+                default:
+                    throw new RuntimeException("Invalid: " + tree.child(i));
             }
         }
         this.user = user;
@@ -79,13 +85,13 @@ public class ContextValue extends Value {
         return new ContextValue(user, date, exchanges, newGraph);
     }
 
-    public LispTree toLispTree() {
+    public LispTree tree() {
         LispTree tree = LispTree.proto.newList();
         tree.addChild("context");
         if (user != null)
             tree.addChild(LispTree.proto.newList("user", user));
         if (date != null)
-            tree.addChild(date.toLispTree());
+            tree.addChild(date.tree());
         // When logging examples, logging the entire graph takes too much screen space.
         // I don't think that we ever deserialize a graph from a serialized context,
         // so this should be fine.
@@ -119,7 +125,7 @@ public class ContextValue extends Value {
 
     @JsonValue
     public String toString() {
-        return toLispTree().toString();
+        return tree().toString();
     }
 
     // A single exchange between the user and the system
@@ -137,7 +143,7 @@ public class ContextValue extends Value {
 
         public Exchange(LispTree tree) {
             utterance = tree.child(1).value;
-            formula = Formulas.fromLispTree(tree.child(2));
+            formula = Formulas.formula(tree.child(2));
             value = Values.fromLispTree(tree.child(3));
         }
 
@@ -146,7 +152,7 @@ public class ContextValue extends Value {
             tree.addChild("exchange");
             tree.addChild(utterance);
             tree.addChild(formula.toLispTree());
-            tree.addChild(value.toLispTree());
+            tree.addChild(value.tree());
             return tree;
         }
 

@@ -64,7 +64,7 @@ public class PredicatePairList implements PairList {
 
     @Override
     public LispTree toLispTree() {
-        return predicate.toLispTree();
+        return predicate.tree();
     }
 
     @Override

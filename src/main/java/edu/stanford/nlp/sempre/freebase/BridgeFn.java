@@ -18,8 +18,8 @@ import java.util.*;
  */
 public class BridgeFn extends SemanticFn {
 
-    private static final Formula intFormula = Formulas.fromLispTree(LispTree.proto.parseFromString("(fb:type.object.type fb:type.int)"));
-    private static final Formula floatFormula = Formulas.fromLispTree(LispTree.proto.parseFromString("(fb:type.object.type fb:type.float)"));
+    private static final Formula intFormula = Formulas.formula(LispTree.proto.parseFromString("(fb:type.object.type fb:type.int)"));
+    private static final Formula floatFormula = Formulas.formula(LispTree.proto.parseFromString("(fb:type.object.type fb:type.float)"));
     public static Options opts = new Options();
     private FbFormulasInfo fbFormulaInfo = null;
     private String description;
@@ -261,11 +261,11 @@ public class BridgeFn extends SemanticFn {
         for (LispTree child : tree.children) {
             if (child.isLeaf())
                 continue;
-            if (child.children.size() == 2 && vf.equals(Formulas.fromLispTree(child.child(0)))) {
+            if (child.children.size() == 2 && vf.equals(Formulas.formula(child.child(0)))) {
                 isBinary = true;
                 break;
             }
-            if (varIsBinary(Formulas.fromLispTree(child), var)) {
+            if (varIsBinary(Formulas.formula(child), var)) {
                 isBinary = true;
                 break;
             }

@@ -139,7 +139,7 @@ public class Grammar {
      */
     public void addStatement(String stmt, String contextPath, Set<String> tags) {
         statements.add(stmt);
-        interpret(contextPath, LispTree.proto.parseFromString(stmt), Sets.newHashSet(Iterables.concat(tags, opts.tags)));
+        interpret(contextPath, LispTree.proto.parseFromString(stmt), tags.isEmpty() ? opts.tags : Sets.newHashSet(Iterables.concat(tags, opts.tags)));
     }
 
     public void addStatement(String stmt, String contextPath) {
@@ -156,7 +156,7 @@ public class Grammar {
         return applyMacros(this.macros, tree);
     }
 
-    private void readOnePath(String path, Set<String> tags) {
+    private void readOnePath(String path, Collection<String> tags) {
         // Save raw lines
         if (statements.size() > 0) statements.add("");
         statements.add("####### " + path);
@@ -196,32 +196,38 @@ public class Grammar {
         out.close();
     }
 
-    private LispTree interpret(String path, LispTree tree, Set<String> tags) {
+    private LispTree interpret(String path, LispTree tree, Collection<String> tags) {
         if (tree.isLeaf())
             throw new RuntimeException("Expected list, got " + tree);
 
         try {
             String command = tree.child(0).value;
-            if ("rule".equals(command)) {
-                interpretRule(tree);
-            } else if ("include".equals(command)) {
-                if (path == null) {
-                    throw new RuntimeException(
-                            "Grammar include statement given without context path");
-                }
-                for (int i = 1; i < tree.children.size(); i++)
-                    readOnePath(new File(path).getParent() + '/' + tree.child(i).value, tags);
-            } else if ("when".equals(command)) {
-                if (interpretBoolean(tree.child(1), tags)) {
-                    for (int i = 2; i < tree.children.size(); i++)
-                        interpret(path, tree.child(i), tags);
-                }
-            } else if ("def".equals(command)) {
-                interpretMacroDef(tree);
-            } else if ("for".equals(command)) {
-                interpretFor(path, tree, tags);
-            } else {
-                throw new RuntimeException("Invalid command: " + command);
+            switch (command) {
+                case "rule":
+                    interpretRule(tree);
+                    break;
+                case "include":
+                    if (path == null) {
+                        throw new RuntimeException(
+                                "Grammar include statement given without context path");
+                    }
+                    for (int i = 1; i < tree.children.size(); i++)
+                        readOnePath(new File(path).getParent() + '/' + tree.child(i).value, tags);
+                    break;
+                case "when":
+                    if (interpretBoolean(tree.child(1), tags)) {
+                        for (int i = 2; i < tree.children.size(); i++)
+                            interpret(path, tree.child(i), tags);
+                    }
+                    break;
+                case "def":
+                    interpretMacroDef(tree);
+                    break;
+                case "for":
+                    interpretFor(path, tree, tags);
+                    break;
+                default:
+                    throw new RuntimeException("Invalid command: " + command);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -231,7 +237,7 @@ public class Grammar {
         return tree;
     }
 
-    private static boolean interpretBoolean(LispTree tree, Set<String> tags) {
+    private static boolean interpretBoolean(LispTree tree, Collection<String> tags) {
         if (tree.isLeaf())
             return tags.contains(tree.value);
         if ("not".equals(tree.child(0).value)) {
@@ -261,7 +267,7 @@ public class Grammar {
         macros.put(var, applyMacros(tree.child(2)));
     }
 
-    public void interpretFor(String path, LispTree tree, Set<String> tags) {
+    public void interpretFor(String path, LispTree tree, Collection<String> tags) {
         if (tree.children.size() <= 3 || !tree.child(1).isLeaf()) {
             throw new RuntimeException("Invalid usage (for |var| (|value| ... |value|) |statement| ...) " + tree);
         }

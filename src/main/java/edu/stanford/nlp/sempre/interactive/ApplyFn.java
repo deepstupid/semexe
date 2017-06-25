@@ -26,7 +26,7 @@ public class ApplyFn extends SemanticFn {
     @Override
     public void init(LispTree tree) {
         super.init(tree);
-        formula = Formulas.fromLispTree(tree.child(1));
+        formula = Formulas.formula(tree.child(1));
     }
 
     public Formula getFormula() {
@@ -39,7 +39,7 @@ public class ApplyFn extends SemanticFn {
             @Override
             public Derivation createDerivation() {
                 List<Derivation> args = c.getChildren();
-                Formula f = Formulas.fromLispTree(formula.toLispTree());
+                Formula f = Formulas.formula(formula.toLispTree());
                 for (Derivation arg : args) {
                     if (!(f instanceof LambdaFormula))
                         throw new RuntimeException("Expected LambdaFormula, but got " + f + "; initial: " + formula);

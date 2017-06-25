@@ -20,7 +20,7 @@ public class ConstantFn extends SemanticFn {
 
     public void init(LispTree tree) {
         super.init(tree);
-        this.formula = Formulas.fromLispTree(tree.child(1));
+        this.formula = Formulas.formula(tree.child(1));
         if (2 < tree.children.size())
             this.type = SemType.fromLispTree(tree.child(2));
         else {

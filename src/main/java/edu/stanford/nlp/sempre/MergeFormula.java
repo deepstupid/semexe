@@ -22,8 +22,14 @@ public class MergeFormula extends Formula {
     }
 
     public static Mode parseMode(String mode) {
-        if ("and".equals(mode)) return Mode.and;
-        if ("or".equals(mode)) return Mode.or;
+        if (mode!=null) {
+            switch (mode) {
+                case "and":
+                    return Mode.and;
+                case "or":
+                    return Mode.or;
+            }
+        }
         return null;
     }
 
@@ -64,9 +70,7 @@ public class MergeFormula extends Formula {
     public boolean equals(Object thatObj) {
         if (!(thatObj instanceof MergeFormula)) return false;
         MergeFormula that = (MergeFormula) thatObj;
-        if (this.mode != that.mode) return false;
-        if (!this.child1.equals(that.child1)) return false;
-        return this.child2.equals(that.child2);
+        return (this.mode == that.mode) && this.child1.equals(that.child1) && this.child2.equals(that.child2);
     }
 
     public int computeHashCode() {

@@ -21,11 +21,11 @@ public class ListValue extends Value {
         this.values = values;
     }
 
-    public LispTree toLispTree() {
+    public LispTree tree() {
         LispTree tree = LispTree.proto.newList();
         tree.addChild("list");
         for (Value value : values)
-            tree.addChild(value == null ? LispTree.proto.newLeaf(null) : value.toLispTree());
+            tree.addChild(value == null ? LispTree.proto.newLeaf(null) : value.tree());
         return tree;
     }
 

@@ -353,11 +353,11 @@ public class Master {
             builder.parser = null;
             builder.buildUnspecified();
         } else if (command.equals("type")) {
-            LogInfo.logs("%s", TypeInference.inferType(Formulas.fromLispTree(tree.child(1))));
+            LogInfo.logs("%s", TypeInference.inferType(Formulas.formula(tree.child(1))));
         } else if (command.equals("execute")) {
             Example ex = session.getLastExample();
             ContextValue context = (ex != null ? ex.context : session.context);
-            Executor.Response execResponse = builder.executor.execute(Formulas.fromLispTree(tree.child(1)), context);
+            Executor.Response execResponse = builder.executor.execute(Formulas.formula(tree.child(1)), context);
             LogInfo.logs("%s", execResponse.value);
         } else if (command.equals("def")) {
             builder.grammar.interpretMacroDef(tree);

@@ -299,7 +299,7 @@ public class GrammarInducer {
         if (rule == null || rule.sem == null) {
             deriv.grammarInfo.formula = deriv.formula;
         } else if (rule.sem instanceof ApplyFn) {
-            Formula f = Formulas.fromLispTree(((ApplyFn) rule.sem).formula.toLispTree());
+            Formula f = Formulas.formula(((ApplyFn) rule.sem).formula.toLispTree());
             for (Derivation arg : args) {
                 if (!(f instanceof LambdaFormula))
                     throw new RuntimeException("Expected LambdaFormula, but got " + f);
@@ -362,7 +362,7 @@ public class GrammarInducer {
         }
 
         for (int i = packings.size() - 1; i >= 0; i--) {
-            baseFormula = new LambdaFormula(varName(packings.get(i)), Formulas.fromLispTree(baseFormula.toLispTree()));
+            baseFormula = new LambdaFormula(varName(packings.get(i)), Formulas.formula(baseFormula.toLispTree()));
         }
         SemanticFn applyFn = new ApplyFn();
         LispTree newTree = LispTree.proto.newList();

@@ -57,8 +57,9 @@ public abstract class SemType {
             return new AtomicSemType(tree.value);
         }
         if ("union".equals(tree.child(0).value)) {
-            List<SemType> result = new ArrayList<>();
-            for (int i = 1; i < tree.children.size(); i++)
+            int n = tree.children.size();
+            List<SemType> result = new ArrayList<>(n);
+            for (int i = 1; i < n; i++)
                 result.add(fromLispTree(tree.child(i)));
             return new UnionSemType(result);
         }
@@ -80,7 +81,7 @@ public abstract class SemType {
     }
 
     public static SemType newUnionSemType(Collection<String> types) {
-        List<SemType> t = new ArrayList<>();
+        List<SemType> t = new ArrayList<>(types.size());
         for (String x : types)
             t.add(new AtomicSemType(x));
         return new UnionSemType(t).simplify();

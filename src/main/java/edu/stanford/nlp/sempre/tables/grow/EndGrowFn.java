@@ -16,7 +16,7 @@ public class EndGrowFn extends SemanticFn {
 
     public void init(LispTree tree) {
         super.init(tree);
-        formula = Formulas.fromLispTree(tree.child(1));
+        formula = Formulas.formula(tree.child(1));
         if (!(formula instanceof LambdaFormula) || !(((LambdaFormula) formula).body instanceof LambdaFormula))
             throw new RuntimeException("Function for EndGrowFn must take 2 arguments (a set s and a relation r)");
     }

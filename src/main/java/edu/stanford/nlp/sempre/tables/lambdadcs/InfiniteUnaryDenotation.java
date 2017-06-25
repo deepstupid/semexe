@@ -160,7 +160,7 @@ public abstract class InfiniteUnaryDenotation extends UnaryDenotation {
         public LispTree toLispTree() {
             LispTree tree = LispTree.proto.newList();
             tree.addChild(comparator);
-            tree.addChild(value.toLispTree());
+            tree.addChild(value.tree());
             return tree;
         }
 
@@ -324,8 +324,8 @@ public abstract class InfiniteUnaryDenotation extends UnaryDenotation {
         public LispTree toLispTree() {
             LispTree tree = LispTree.proto.newList();
             tree.addChild("and");
-            tree.addChild(LispTree.proto.newList(rangeEnds.leftComparator, rangeEnds.leftValue.toLispTree()));
-            tree.addChild(LispTree.proto.newList(rangeEnds.rightComparator, rangeEnds.rightValue.toLispTree()));
+            tree.addChild(LispTree.proto.newList(rangeEnds.leftComparator, rangeEnds.leftValue.tree()));
+            tree.addChild(LispTree.proto.newList(rangeEnds.rightComparator, rangeEnds.rightValue.tree()));
             return tree;
         }
 
@@ -412,7 +412,7 @@ public abstract class InfiniteUnaryDenotation extends UnaryDenotation {
 
         @Override
         public LispTree toLispTree() {
-            return date.toLispTree();
+            return date.tree();
         }
 
         @Override

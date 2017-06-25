@@ -97,7 +97,7 @@ public class LambdaDCSExecutorTest {
         LambdaDCSExecutor.opts.verbose = 5;
         LambdaDCSExecutor.opts.executeBinary = true;
         LogInfo.begin_track("formula: %s", formula);
-        Executor.Response response = executor.execute(Formulas.fromLispTree(LispTree.proto.parseFromString(formula)), context);
+        Executor.Response response = executor.execute(Formulas.formula(LispTree.proto.parseFromString(formula)), context);
         LogInfo.logs("RESULT: %s", response.value);
         LogInfo.end_track();
         if (checker != null)

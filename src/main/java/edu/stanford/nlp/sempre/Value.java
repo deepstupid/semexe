@@ -18,7 +18,7 @@ public abstract class Value {
         return Values.fromLispTree(LispTree.proto.parseFromString(str));
     }
 
-    public abstract LispTree toLispTree();
+    public abstract LispTree tree();
 
     // Print using LogInfo.
     public void log() {
@@ -27,7 +27,7 @@ public abstract class Value {
 
     @JsonValue
     public String toString() {
-        return toLispTree().toString();
+        return tree().toString();
     }
 
     // (optional) String used for sorting Values. The default is to call toString()

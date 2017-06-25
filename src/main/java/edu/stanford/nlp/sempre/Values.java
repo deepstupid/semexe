@@ -17,18 +17,35 @@ public final class Values {
         if (tree.isLeaf())
             return null;
         String type = tree.child(0).value;
-        if ("name".equals(type)) return new NameValue(tree);
-        if ("boolean".equals(type)) return new BooleanValue(tree);
-        if ("number".equals(type)) return new NumberValue(tree);
-        if ("string".equals(type)) return new StringValue(tree);
-        if ("list".equals(type)) return new ListValue(tree);
-        if ("table".equals(type)) return new TableValue(tree);
-        if ("description".equals(type)) return new DescriptionValue(tree);
-        if ("url".equals(type)) return new UriValue(tree);
-        if ("context".equals(type)) return new ContextValue(tree);
-        if ("date".equals(type)) return new DateValue(tree);
-        if ("error".equals(type)) return new ErrorValue(tree);
-        if ("time".equals(type)) return new TimeValue(tree);
+        if (type == null)
+            return null;
+
+        switch (type) {
+            case "name":
+                return new NameValue(tree);
+            case "boolean":
+                return new BooleanValue(tree);
+            case "number":
+                return new NumberValue(tree);
+            case "string":
+                return new StringValue(tree);
+            case "list":
+                return new ListValue(tree);
+            case "table":
+                return new TableValue(tree);
+            case "description":
+                return new DescriptionValue(tree);
+            case "url":
+                return new UriValue(tree);
+            case "context":
+                return new ContextValue(tree);
+            case "date":
+                return new DateValue(tree);
+            case "error":
+                return new ErrorValue(tree);
+            case "time":
+                return new TimeValue(tree);
+        }
         return null;
     }
 

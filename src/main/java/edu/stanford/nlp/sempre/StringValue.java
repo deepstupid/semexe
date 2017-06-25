@@ -18,7 +18,7 @@ public class StringValue extends Value {
         this.value = tree.child(1).value;
     }
 
-    public LispTree toLispTree() {
+    public LispTree tree() {
         LispTree tree = LispTree.proto.newList();
         tree.addChild("string");
         tree.addChild(value);

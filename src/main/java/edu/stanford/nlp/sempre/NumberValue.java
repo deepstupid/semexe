@@ -30,7 +30,7 @@ public class NumberValue extends Value {
         this.unit = 2 < tree.children.size() ? tree.child(2).value : unitless;
     }
 
-    public LispTree toLispTree() {
+    public LispTree tree() {
         LispTree tree = LispTree.proto.newList();
         tree.addChild("number");
         tree.addChild(Fmt.D(value));

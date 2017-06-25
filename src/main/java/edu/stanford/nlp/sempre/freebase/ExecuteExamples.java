@@ -72,7 +72,7 @@ public class ExecuteExamples implements Runnable {
                     throw new RuntimeException("Bad: " + tree);
                 for (int i = 1; i < tree.children.size(); i++) {
                     if ("targetFormula".equals(tree.child(i).child(0).value)) {
-                        Formula formula = Formulas.fromLispTree(tree.child(i).child(1));
+                        Formula formula = Formulas.formula(tree.child(i).child(1));
                         formula = test(formula);
                         queryReturnsResults(formula);
                     }

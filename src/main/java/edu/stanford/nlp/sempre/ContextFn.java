@@ -96,7 +96,7 @@ public class ContextFn extends SemanticFn {
             // Extract from the logical form.
             private void extractFormulas(LispTree formula) {
                 if (correctDepth(formula, 0) && typeCheck(formula)) {
-                    addFormula(Formulas.fromLispTree(formula));
+                    addFormula(Formulas.formula(formula));
                 }
                 if (formula.isLeaf())
                     return;
@@ -116,7 +116,7 @@ public class ContextFn extends SemanticFn {
             }
 
             private boolean typeCheck(LispTree treeFormula) {
-                Formula formula = Formulas.fromLispTree(treeFormula);
+                Formula formula = Formulas.formula(treeFormula);
                 SemType type = TypeInference.inferType(formula);
                 type = restrictType.meet(type);
                 return type.isValid();

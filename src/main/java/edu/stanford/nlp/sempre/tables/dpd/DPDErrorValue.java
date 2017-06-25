@@ -40,14 +40,14 @@ public class DPDErrorValue extends Value {
     }
 
     @Override
-    public LispTree toLispTree() {
+    public LispTree tree() {
         LispTree tree = LispTree.proto.newList();
         tree.addChild("dperror");
         tree.addChild(rule.toLispTree());
         if (child1 != null)
-            tree.addChild(child1.toLispTree());
+            tree.addChild(child1.tree());
         if (child2 != null)
-            tree.addChild(child2.toLispTree());
+            tree.addChild(child2.tree());
         if (child1 == null && child2 == null)
             tree.addChild(formula.toLispTree());
         return tree;

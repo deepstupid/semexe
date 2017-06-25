@@ -42,11 +42,11 @@ public class InfiniteListValue extends Value {
     }
 
     @Override
-    public LispTree toLispTree() {
+    public LispTree tree() {
         LispTree tree = LispTree.proto.newList();
         for (Object x : representation) {
             if (x instanceof Value)
-                tree.addChild(((Value) x).toLispTree());
+                tree.addChild(((Value) x).tree());
             else
                 tree.addChild(x.toString());
         }

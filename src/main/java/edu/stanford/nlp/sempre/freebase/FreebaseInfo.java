@@ -199,7 +199,7 @@ public final class FreebaseInfo {
 
         Map<Formula, FbFormulasInfo.BinaryFormulaInfo> res = new HashMap<>();
         for (Map.Entry<String, Integer> stringIntegerEntry : bPopularityMap.entrySet()) {
-            Formula f = Formulas.fromLispTree(LispTree.proto.parseFromString((String) stringIntegerEntry.getKey()));
+            Formula f = Formulas.formula(LispTree.proto.parseFromString((String) stringIntegerEntry.getKey()));
             BinaryFormulaInfo info = new BinaryFormulaInfo(f, type1Map.get((String) stringIntegerEntry.getKey()), type2Map.get((String) stringIntegerEntry.getKey()), unit2Map.get((String) stringIntegerEntry.getKey()), "", bDescriptionsMap.get((String) stringIntegerEntry.getKey()), stringIntegerEntry.getValue());
             if (!info.isComplete()) {
                 continue;

@@ -14,10 +14,7 @@ public class NameValue extends Value {
 
     public NameValue(LispTree tree) {
         this.id = tree.child(1).value;
-        if (tree.children.size() > 2)
-            this.description = tree.child(2).value;
-        else
-            this.description = null;
+        this.description = tree.children.size() > 2 ? tree.child(2).value : null;
         assert (this.id != null) : tree;
     }
 
@@ -34,7 +31,7 @@ public class NameValue extends Value {
         this.description = description;
     }
 
-    public LispTree toLispTree() {
+    public LispTree tree() {
         LispTree tree = LispTree.proto.newList();
         tree.addChild("name");
         tree.addChild(id);
@@ -55,7 +52,7 @@ public class NameValue extends Value {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof NameValue)) return false;
         NameValue that = (NameValue) o;
         // Note: only check id, not description
         return this.id.equals(that.id);

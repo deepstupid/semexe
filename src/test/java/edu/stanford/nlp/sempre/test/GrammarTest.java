@@ -34,9 +34,16 @@ public class GrammarTest {
      * $Cat => $Cat $Cat
      */
     public static boolean isValidBinaryGrammar(Grammar g) {
-        for (Rule rule : g.getRules()) {
-            if (!Rule.isCat(rule.lhs)) return false;
-            if (rule.rhs.size() != 1 && rule.rhs.size() != 2) return false;
+        List<Rule> r = g.getRules();
+        return isValidBinaryGrammar(r);
+    }
+
+    private static boolean isValidBinaryGrammar(List<Rule> r) {
+        for (Rule rule : r) {
+            if (!Rule.isCat(rule.lhs))
+                return false;
+            if (rule.rhs.size() != 1 && rule.rhs.size() != 2)
+                return false;
         }
 
         return true;
@@ -45,15 +52,16 @@ public class GrammarTest {
     @Test
     public void testBinarizationOfTernaryGrammar() {
 
-        Grammar g = makeTernaryGrammar();
-        System.out.println(g.toString());
+        Grammar.opts.binarizeRules = true;
+        Grammar x = makeTernaryGrammar();
+        System.out.println(x.toString());
 
-        List<Rule> rules = g.getRules();
-        System.out.println(rules.toString());
+        List<Rule> y = x.getRules();
+        System.out.println(y.toString());
 
-        assertTrue(isValidBinaryGrammar(g));
+        assertTrue(isValidBinaryGrammar(x));
 
-        assertEquals(6, rules.size());
+        assertEquals(6, y.size());
 
     }
 

@@ -50,7 +50,7 @@ public class TableValue extends Value {
         return header.size();
     }
 
-    public LispTree toLispTree() {
+    public LispTree tree() {
         LispTree tree = LispTree.proto.newList();
         tree.addChild("table");
         LispTree headerTree = LispTree.proto.newList();
@@ -60,7 +60,7 @@ public class TableValue extends Value {
         for (List<Value> row : rows) {
             LispTree rowTree = LispTree.proto.newList();
             for (Value value : row)
-                rowTree.addChild(value == null ? LispTree.proto.newLeaf(null) : value.toLispTree());
+                rowTree.addChild(value == null ? LispTree.proto.newLeaf(null) : value.tree());
             tree.addChild(rowTree);
         }
         return tree;

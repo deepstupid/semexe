@@ -53,7 +53,7 @@ public class DenotationTypeInference {
             }
             return commonType;
         } else if (value instanceof InfiniteListValue) {
-            LispTree tree = value.toLispTree();
+            LispTree tree = value.tree();
             if (tree.children.size() >= 2) {
                 // (comparison value) or (comparison value comparison value)
                 return getValueType(Values.fromLispTree(tree.child(1)));

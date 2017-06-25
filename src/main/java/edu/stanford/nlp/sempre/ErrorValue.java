@@ -50,7 +50,7 @@ public class ErrorValue extends Value {
         return null;
     }
 
-    public LispTree toLispTree() {
+    public LispTree tree() {
         LispTree tree = LispTree.proto.newList();
         tree.addChild("error");
         tree.addChild(type != null ? type : "");

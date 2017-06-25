@@ -436,9 +436,9 @@ public class Free917Converter implements Runnable {
             String arg = argToPredMap.keySet().iterator().next();
             String pred = argToPredMap.get(arg);
 
-            BinaryFormulaInfo info = formulaInfo.getBinaryInfo(Formulas.fromLispTree(LispTree.proto.parseFromString(pred)));
+            BinaryFormulaInfo info = formulaInfo.getBinaryInfo(Formulas.formula(LispTree.proto.parseFromString(pred)));
             if (info != null) {
-                String type = formulaInfo.getBinaryInfo(Formulas.fromLispTree(LispTree.proto.parseFromString(pred))).expectedType1;
+                String type = formulaInfo.getBinaryInfo(Formulas.formula(LispTree.proto.parseFromString(pred))).expectedType1;
                 if (cvts.contains(type)) {
                     return fixCvtFormulas(pred, arg);
                 }

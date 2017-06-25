@@ -24,7 +24,7 @@ public class TimeValue extends Value {
     }
 
     @Override
-    public LispTree toLispTree() {
+    public LispTree tree() {
         LispTree tree = LispTree.proto.newList();
         tree.addChild("time");
         tree.addChild(String.valueOf(hour));

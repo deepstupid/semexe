@@ -28,7 +28,7 @@ public class DALExecutorTest {
                                      Predicate<World> checker) {
         LogInfo.begin_track("formula: %s", formula);
         DALExecutor.opts.worldType = "VoxelWorld";
-        Executor.Response response = executor.execute(Formulas.fromLispTree(LispTree.proto.parseFromString(formula)),
+        Executor.Response response = executor.execute(Formulas.formula(LispTree.proto.parseFromString(formula)),
                 context);
 
         NaiveKnowledgeGraph graph = (NaiveKnowledgeGraph) context.graph;

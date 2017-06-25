@@ -46,7 +46,7 @@ public final class ConvertTargetValueFromListToString {
                 StringValue newTargetValue = new StringValue(output.toString());
                 LispTree newTargetValueTree = LispTree.proto.newList();
                 newTargetValueTree.addChild("targetValue");
-                newTargetValueTree.addChild(newTargetValue.toLispTree());
+                newTargetValueTree.addChild(newTargetValue.tree());
                 outTree.addChild(newTargetValueTree);
                 outTree.print(120, 120, writer);
                 writer.println();

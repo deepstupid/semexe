@@ -38,7 +38,7 @@ public abstract class Formula {
 
     @JsonCreator
     public static Formula fromString(String str) {
-        return Formulas.fromLispTree(LispTree.proto.parseFromString(str));
+        return Formulas.formula(LispTree.proto.parseFromString(str));
     }
 
     // Serialize as LispTree.

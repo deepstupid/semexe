@@ -265,11 +265,11 @@ public class Derivation implements SemanticFn.Callable, HasScore {
             tree.addChild(LispTree.proto.newList("formula", formula.toLispTree()));
         if (value != null) {
             if (opts.showValues)
-                tree.addChild(LispTree.proto.newList("value", value.toLispTree()));
+                tree.addChild(LispTree.proto.newList("value", value.tree()));
             else if (value instanceof ListValue) {
                 List<Value> values = ((ListValue) value).values;
                 if (opts.showFirstValue && values.size() > 0) {
-                    tree.addChild(LispTree.proto.newList(values.size() + " values", values.get(0).toLispTree()));
+                    tree.addChild(LispTree.proto.newList(values.size() + " values", values.get(0).tree()));
                 } else {
                     tree.addChild(values.size() + " values");
                 }

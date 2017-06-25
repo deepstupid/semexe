@@ -70,7 +70,7 @@ public class FloatingParsingTest {
     }
 
     Predicate<Example> contains(String formula) {
-        Formula answer = Formulas.fromLispTree(LispTree.proto.parseFromString(formula));
+        Formula answer = Formulas.formula(LispTree.proto.parseFromString(formula));
         return e -> e.predDerivations.stream().anyMatch(d -> d.formula.equals(answer));
     }
 

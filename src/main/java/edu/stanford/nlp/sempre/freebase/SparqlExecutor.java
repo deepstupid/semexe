@@ -111,13 +111,13 @@ public class SparqlExecutor extends Executor {
         SparqlExecutor executor = new SparqlExecutor();
 
         if (mainOpts.formula != null) {
-            LogInfo.logs("%s", executor.execute(Formulas.fromLispTree(LispTree.proto.parseFromString(mainOpts.formula)), null).value);
+            LogInfo.logs("%s", executor.execute(Formulas.formula(LispTree.proto.parseFromString(mainOpts.formula)), null).value);
         }
 
         if (mainOpts.formulasPath != null) {
             Iterator<LispTree> trees = LispTree.proto.parseFromFile(mainOpts.formulasPath);
             while (trees.hasNext()) {
-                LogInfo.logs("%s", executor.execute(Formulas.fromLispTree(trees.next()), null).value);
+                LogInfo.logs("%s", executor.execute(Formulas.formula(trees.next()), null).value);
             }
         }
 

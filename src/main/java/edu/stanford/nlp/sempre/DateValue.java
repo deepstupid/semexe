@@ -72,7 +72,7 @@ public class DateValue extends Value {
         return new DateValue(year, month, day);
     }
 
-    public LispTree toLispTree() {
+    public LispTree tree() {
         LispTree tree = LispTree.proto.newList();
         tree.addChild("date");
         tree.addChild(String.valueOf(year));

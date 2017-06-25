@@ -176,9 +176,9 @@ public class SerializedDumper implements Runnable {
         if (ex.targetFormula != null)
             tree.addChild(LispTree.proto.newList("targetFormula", ex.targetFormula.toLispTree()));
         if (ex.targetValue != null)
-            tree.addChild(LispTree.proto.newList("targetValue", ex.targetValue.toLispTree()));
+            tree.addChild(LispTree.proto.newList("targetValue", ex.targetValue.tree()));
         if (ex.context != null)
-            tree.addChild(ex.context.toLispTree());
+            tree.addChild(ex.context.tree());
 
         // Language info
         if (ex.languageInfo != null) {

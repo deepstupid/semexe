@@ -171,7 +171,7 @@ public class LazyLoadedExampleList implements List<Example> {
             } else if ("utterance".equals(label)) {
                 b.setUtterance(arg.child(1).value);
             } else if ("targetFormula".equals(label)) {
-                b.setTargetFormula(Formulas.fromLispTree(arg.child(1)));
+                b.setTargetFormula(Formulas.formula(arg.child(1)));
             } else if ("targetValue".equals(label) || "targetValues".equals(label)) {
                 if (arg.children.size() != 2)
                     throw new RuntimeException("Expect one target value");
@@ -234,7 +234,7 @@ public class LazyLoadedExampleList implements List<Example> {
             LispTree arg = tree.child(i);
             String label = arg.child(0).value;
             if ("formula".equals(label)) {
-                b.formula(Formulas.fromLispTree(arg.child(1)));
+                b.formula(Formulas.formula(arg.child(1)));
             } else if ("type".equals(label)) {
                 b.type(SemType.fromLispTree(arg.child(1)));
             } else if ("value".equals(label)) {

@@ -17,7 +17,7 @@ public class ValueFormula<T extends Value> extends PrimitiveFormula {
 
     public LispTree toLispTree() {
         if (value instanceof NameValue) return LispTree.proto.newLeaf(((NameValue) value).id);
-        return value.toLispTree();
+        return value.tree();
     }
 
     @SuppressWarnings({"equalshashcode"})

@@ -39,7 +39,7 @@ public class ApplyFn extends SemanticFn {
 
     public void init(LispTree tree) {
         super.init(tree);
-        formula = Formulas.fromLispTree(tree.child(1));
+        formula = Formulas.formula(tree.child(1));
         for (int i = 2; i < tree.children.size(); i++) {
             hasTypeInfo = true;
             LispTree typeInfo = tree.child(i);

@@ -91,7 +91,7 @@ public class Example {
             } else if ("canonicalUtterance".equals(label)) {
                 b.setUtterance(arg.child(1).value);
             } else if ("targetFormula".equals(label)) {
-                b.setTargetFormula(Formulas.fromLispTree(arg.child(1)));
+                b.setTargetFormula(Formulas.formula(arg.child(1)));
             } else if ("targetValue".equals(label) || "targetValues".equals(label)) {
                 if (arg.children.size() != 2)
                     throw new RuntimeException("Expect one target value");
@@ -123,7 +123,7 @@ public class Example {
                 for (LispTree child : arg.child(1).children)
                     ex.languageInfo.nerValues.add("null".equals(child.value) ? null : child.value);
             } else if ("alternativeFormula".equals(label)) {
-                ex.addAlternativeFormula(Formulas.fromLispTree(arg.child(1)));
+                ex.addAlternativeFormula(Formulas.formula(arg.child(1)));
             } else if ("evaluation".equals(label)) {
                 ex.evaluation = Evaluation.fromLispTree(arg.child(1));
             } else if ("predDerivations".equals(label)) {
@@ -168,7 +168,7 @@ public class Example {
         if (!valueTree.isLeaf() || !"null".equals(valueTree.value))
             b.value(Values.fromLispTree(valueTree));
 
-        b.formula(Formulas.fromLispTree(item.child(i++)));
+        b.formula(Formulas.formula(item.child(i++)));
 
         FeatureVector fv = new FeatureVector();
         LispTree features = item.child(i++);
@@ -187,7 +187,7 @@ public class Example {
         item.addChild(String.valueOf(deriv.prob));
         item.addChild(String.valueOf(deriv.score));
         if (deriv.value != null)
-            item.addChild(deriv.value.toLispTree());
+            item.addChild(deriv.value.tree());
         else
             item.addChild("null");
         item.addChild(deriv.formula.toLispTree());
@@ -220,7 +220,7 @@ public class Example {
             LispTree arg = item.child(i);
             String label = arg.child(0).value;
             if ("formula".equals(label)) {
-                b.formula(Formulas.fromLispTree(arg.child(1)));
+                b.formula(Formulas.formula(arg.child(1)));
             } else if ("value".equals(label)) {
                 b.value(Values.fromLispTree(arg.child(1)));
             } else if ("type".equals(label)) {
@@ -377,7 +377,7 @@ public class Example {
         if (targetFormula != null)
             tree.addChild(LispTree.proto.newList("targetFormula", targetFormula.toLispTree()));
         if (targetValue != null)
-            tree.addChild(LispTree.proto.newList("targetValue", targetValue.toLispTree()));
+            tree.addChild(LispTree.proto.newList("targetValue", targetValue.tree()));
 
         if (languageInfo != null) {
             if (languageInfo.tokens != null)

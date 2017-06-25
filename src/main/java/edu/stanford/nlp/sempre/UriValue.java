@@ -13,7 +13,7 @@ public class UriValue extends Value {
         this.value = value;
     }
 
-    public LispTree toLispTree() {
+    public LispTree tree() {
         LispTree tree = LispTree.proto.newList();
         tree.addChild("url");
         tree.addChild(value != null ? value : "");

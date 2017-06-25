@@ -186,9 +186,9 @@ public class NaiveKnowledgeGraph extends KnowledgeGraph {
 
         public LispTree toLispTree() {
             LispTree tree = LispTree.proto.newList();
-            tree.addChild(e1.toLispTree());
-            tree.addChild(r.toLispTree());
-            tree.addChild(e2.toLispTree());
+            tree.addChild(e1.tree());
+            tree.addChild(r.tree());
+            tree.addChild(e2.tree());
             return tree;
         }
 

@@ -168,7 +168,7 @@ public class InteractiveMaster extends Master {
             List<Formula> targetFormulas = new ArrayList<>();
             try {
                 targetFormulas = tree.children.subList(2, tree.children.size()).stream()
-                        .map(t -> Formulas.fromLispTree(LispTree.proto.parseFromString(t.value))).collect(Collectors.toList());
+                        .map(t -> Formulas.formula(LispTree.proto.parseFromString(t.value))).collect(Collectors.toList());
             } catch (Exception e) {
                 e.printStackTrace();
                 response.lines.add("cannot accept formula: ");

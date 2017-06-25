@@ -70,7 +70,7 @@ public class CanonicalizeExamples implements Runnable {
                     LispTree subtree = tree.child(i);
                     if ("targetFormula".equals(subtree.child(0).value)) {
                         for (int j = 1; j < subtree.children.size(); j++) {
-                            Formula formula = Formulas.fromLispTree(subtree.child(j));
+                            Formula formula = Formulas.formula(subtree.child(j));
                             formula = convert(formula);
                             subtree.children.set(j, formula.toLispTree());  // Use converted formula
                         }

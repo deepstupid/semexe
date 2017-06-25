@@ -69,7 +69,7 @@ public final class InteractiveUtils {
             ((InteractiveBeamParser) parser).parseWithoutExecuting(params, ex, false);
 
             boolean found = false;
-            Formula targetFormula = Formulas.fromLispTree(LispTree.proto.parseFromString(formula));
+            Formula targetFormula = Formulas.formula(LispTree.proto.parseFromString(formula));
             for (Derivation d : ex.predDerivations) {
                 // LogInfo.logs("considering: %s", d.formula.toString());
                 if (d.formula.equals(targetFormula)) {

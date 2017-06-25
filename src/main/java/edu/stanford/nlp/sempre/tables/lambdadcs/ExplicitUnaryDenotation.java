@@ -33,7 +33,7 @@ public class ExplicitUnaryDenotation extends UnaryDenotation {
         LispTree tree = LispTree.proto.newList();
         tree.addChild("unary");
         for (Value value : values)
-            tree.addChild(value.toLispTree());
+            tree.addChild(value.tree());
         return tree;
     }
 

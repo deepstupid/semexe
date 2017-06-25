@@ -16,7 +16,8 @@ import java.util.stream.IntStream;
  * @author Percy Liang
  */
 public abstract class Formulas {
-    public static Formula fromLispTree(LispTree tree) {
+
+    public static Formula formula(LispTree tree) {
         // Try to interpret as ValueFormula
         if (tree.isLeaf())  // Leaves are name values
             return new ValueFormula<>(new NameValue(tree.value, null));
@@ -30,18 +31,18 @@ public abstract class Formulas {
                 case "var":
                     return new VariableFormula(tree.child(1).value);
                 case "lambda":
-                    return new LambdaFormula(tree.child(1).value, fromLispTree(tree.child(2)));
+                    return new LambdaFormula(tree.child(1).value, formula(tree.child(2)));
                 case "mark":
-                    return new MarkFormula(tree.child(1).value, fromLispTree(tree.child(2)));
+                    return new MarkFormula(tree.child(1).value, formula(tree.child(2)));
                 case "not":
-                    return new NotFormula(fromLispTree(tree.child(1)));
+                    return new NotFormula(formula(tree.child(1)));
                 case "reverse":
-                    return new ReverseFormula(fromLispTree(tree.child(1)));
+                    return new ReverseFormula(formula(tree.child(1)));
                 case "call": {
-                    Formula callFunc = fromLispTree(tree.child(1));
+                    Formula callFunc = formula(tree.child(1));
                     List<Formula> args = IntStream
                             .range(2, tree.children.size())
-                            .mapToObj(i -> fromLispTree(tree.child(i)))
+                            .mapToObj(i -> formula(tree.child(i)))
                             .collect(Collectors.toList());
                     return new CallFormula(callFunc, args);
                 }
@@ -52,13 +53,13 @@ public abstract class Formulas {
         { // Merge: (and (fb:type.object.type fb:people.person) (fb:people.person.children fb:en.barack_obama))
             MergeFormula.Mode mode = MergeFormula.parseMode(func);
             if (mode != null)
-                return new MergeFormula(mode, fromLispTree(tree.child(1)), fromLispTree(tree.child(2)));
+                return new MergeFormula(mode, formula(tree.child(1)), formula(tree.child(2)));
         }
 
         { // Aggregate: (count (fb:type.object.type fb:people.person))
             AggregateFormula.Mode mode = AggregateFormula.parseMode(func);
             if (mode != null)
-                return new AggregateFormula(mode, fromLispTree(tree.child(1)));
+                return new AggregateFormula(mode, formula(tree.child(1)));
         }
 
         { // Superlative: (argmax 1 1 (fb:type.object.type fb:people.person) (lambda x (!fb:people.person.height_meters (var x))))
@@ -70,15 +71,15 @@ public abstract class Formulas {
                         mode,
                         rank,
                         count,
-                        fromLispTree(tree.child(3)),
-                        fromLispTree(tree.child(4)));
+                        formula(tree.child(3)),
+                        formula(tree.child(4)));
             }
         }
 
         { // Arithmetic: (- (!fb:people.person.height_meters (var x)) (!fb:people.person.height_meters (var y)))
             ArithmeticFormula.Mode mode = ArithmeticFormula.parseMode(func);
             if (mode != null)
-                return new ArithmeticFormula(mode, fromLispTree(tree.child(1)), fromLispTree(tree.child(2)));
+                return new ArithmeticFormula(mode, formula(tree.child(1)), formula(tree.child(2)));
         }
 
         { // ActionFormula
@@ -86,7 +87,7 @@ public abstract class Formulas {
             if (mode != null) {
                 List<Formula> args = Lists.newArrayList();
                 for (int i = 1; i < tree.children.size(); i++)
-                    args.add(fromLispTree(tree.child(i)));
+                    args.add(formula(tree.child(i)));
                 return new ActionFormula(mode, args);
             }
         }
@@ -94,7 +95,7 @@ public abstract class Formulas {
         // Default is join: (fb:type.object.type fb:people.person)
         if (tree.children.size() != 2)
             throw new RuntimeException("Invalid number of arguments for join (want 2): " + tree);
-        return new JoinFormula(fromLispTree(tree.child(0)), fromLispTree(tree.child(1)));
+        return new JoinFormula(formula(tree.child(0)), formula(tree.child(1)));
     }
 
     // Special case to enable "argmax 1 1" rather than "argmax (number 1) (number 1)"
@@ -105,7 +106,7 @@ public abstract class Formulas {
             NumberValue value = new NumberValue(d);
             return new ValueFormula(value);
         } catch (NumberFormatException e) {
-            Formula formula = fromLispTree(tree);
+            Formula formula = formula(tree);
             if (!(formula instanceof PrimitiveFormula))
                 throw new RuntimeException("Rank and count of argmax must be variables or numbers");
             return formula;

@@ -17,11 +17,11 @@ public class ScopedValue extends Value {
     }
 
     @Override
-    public LispTree toLispTree() {
+    public LispTree tree() {
         LispTree tree = LispTree.proto.newList();
         tree.addChild("scoped");
-        tree.addChild(head.toLispTree());
-        tree.addChild(relation.toLispTree());
+        tree.addChild(head.tree());
+        tree.addChild(relation.tree());
         return tree;
     }
 

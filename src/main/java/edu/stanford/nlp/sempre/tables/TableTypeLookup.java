@@ -20,7 +20,7 @@ public class TableTypeLookup implements TypeLookup {
         String formulaString =
                 "(lambda x ((reverse >) ((reverse fb:cell.cell.number) (var x))))";
         //"(lambda x (< (< ((reverse <) ((reverse fb:row.row.next) (var x))))))";
-        Formula formula = Formulas.fromLispTree(LispTree.proto.parseFromString(formulaString));
+        Formula formula = Formulas.formula(LispTree.proto.parseFromString(formulaString));
         LogInfo.logs("%s", formulaString);
         LogInfo.logs("%s", TypeInference.inferType(formula, typeLookup));
     }
