@@ -292,7 +292,7 @@ public abstract class AbstractLispTree<TreeType extends AbstractLispTree> implem
         private BufferedReader reader;
         private int start_line_num = -1, start_i = -1;  // Where we were when we started this madness
         private int line_num = 0;  // Current line
-        private StringBuilder line = null;  // Current line
+        private String line = null;  // Current line
         private int i = -1;  // Current position in line
         private int n = 0;  // Length of line
         private char c = 0;  // Current character
@@ -323,33 +323,27 @@ public abstract class AbstractLispTree<TreeType extends AbstractLispTree> implem
             throw new RuntimeException(String.format("%s from %s:%s to %s:%s", msg, start_line_num, start_i, line_num, i));
         }
 
-        // Move one character
-        private void advance() {
-            i++;
-            // If exhausted line, then go to next
-            while (i == n) {
-                try {
-                    //if (line == null)
-                    String str = reader.readLine();
-                    if (str == null)
-                        break;
-                    line = new StringBuilder(str);
-                    //else
-                        //line.setLength(0);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                if (line == null) {
-                    i = n = 0;
-                    break;
-                }
-                line.append('\n');;
-                line_num++;
-                n = line.length();
-                i = 0;
-            }
-            c = ((line == null || line.length()==0) ? 0 : line.charAt(i));
+   // Move one character
+    private void advance() {
+      i++;
+      // If exhausted line, then go to next
+      while (i == n) {
+        try {
+          line = reader.readLine();
+        } catch (IOException e) {
+          throw new RuntimeException(e);
         }
+        if (line == null) {
+          i = n = 0;
+          break;
+        }
+        line += "\n";
+        line_num++;
+        n = line.length();
+        i = 0;
+      }
+      c = (line == null ? 0 : line.charAt(i));
+    }
 
         private void skipSpace() {
             while (c != 0) {

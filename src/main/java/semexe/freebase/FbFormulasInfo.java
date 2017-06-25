@@ -69,8 +69,11 @@ public final class FbFormulasInfo {
      */
     private void computeNumericalPredicatesMap() {
         for (BinaryFormulaInfo info : binaryFormulaInfoMap.values()) {
-            if (info.expectedType1.equals("fb:type.int") || info.expectedType1.equals("fb:type.float")) {
-                MapUtils.addToSet(typeToNumericalPredicates, info.expectedType2, info);
+            switch (info.expectedType1) {
+                case "fb:type.int":
+                case "fb:type.float":
+                    MapUtils.addToSet(typeToNumericalPredicates, info.expectedType2, info);
+                    break;
             }
         }
     }
@@ -80,22 +83,21 @@ public final class FbFormulasInfo {
     }
 
     private void computeReverseFormulaInfo() {
-        List<BinaryFormulaInfo> entriesToAdd = new LinkedList<>();
+        List<BinaryFormulaInfo> toAdd = new ArrayList(binaryFormulaInfoMap.size());
         for (Map.Entry<Formula, BinaryFormulaInfo> formulaBinaryFormulaInfoEntry : binaryFormulaInfoMap.entrySet()) {
             BinaryFormulaInfo info = formulaBinaryFormulaInfoEntry.getValue();
-            Formula reverseFormula = Formulas.reverseFormula((Formula) formulaBinaryFormulaInfoEntry.getKey());
+            Formula reverseFormula = Formulas.reverseFormula(formulaBinaryFormulaInfoEntry.getKey());
 
             if (!binaryFormulaInfoMap.containsKey(reverseFormula)) {
-                entriesToAdd.add(
-                        new BinaryFormulaInfo(
-                                reverseFormula,
-                                info.expectedType2, info.expectedType1, info.unitId, info.unitDesc, info.descriptions, info.popularity));
+                BinaryFormulaInfo reverse = new BinaryFormulaInfo(
+                        reverseFormula,
+                        info.expectedType2, info.expectedType1, info.unitId, info.unitDesc, info.descriptions, info.popularity);
+
+                toAdd.add(reverse);
             }
         }
-        LogInfo.log("Adding reverse formulas: " + entriesToAdd.size());
-        for (BinaryFormulaInfo e : entriesToAdd) {
-            binaryFormulaInfoMap.put(e.formula, e);
-        }
+
+        toAdd.forEach(k -> binaryFormulaInfoMap.put(k.formula, k));
     }
 
     public BinaryFormulaInfo getBinaryInfo(Formula formula) {
@@ -261,7 +263,7 @@ public final class FbFormulasInfo {
             boolean rev = FreebaseInfo.isReverseProperty(tree.value);
             String fbProperty = rev ? tree.value.substring(1) : tree.value;
             String oppositeProperty = freebaseInfo.getOppositeFbProperty(fbProperty);
-            return rev ? Formulas.newNameFormula(oppositeProperty) : Formulas.newNameFormula('!' + oppositeProperty);
+            return Formulas.newNameFormula(rev ?  oppositeProperty : ('!' + oppositeProperty));
         } else {
             String binary1 = tree.child(2).child(0).value;
             binary1 = FreebaseInfo.isReverseProperty(binary1) ? binary1.substring(1) : binary1;
@@ -349,7 +351,7 @@ public final class FbFormulasInfo {
     public Comparator<Formula> getPopularityComparator() {
         Counter<Formula> counter = new ClassicCounter<>();
         for (Map.Entry<Formula, BinaryFormulaInfo> formulaBinaryFormulaInfoEntry : binaryFormulaInfoMap.entrySet())
-            counter.incrementCount((Formula) formulaBinaryFormulaInfoEntry.getKey(), formulaBinaryFormulaInfoEntry.getValue().popularity);
+            counter.incrementCount(formulaBinaryFormulaInfoEntry.getKey(), formulaBinaryFormulaInfoEntry.getValue().popularity);
 
         return new FormulaByCounterComparator(counter);
     }
@@ -473,9 +475,7 @@ public final class FbFormulasInfo {
             if (count1 < count2) return +1;
             double pop1 = binaryFormulaInfoMap.get(f1).popularity;
             double pop2 = binaryFormulaInfoMap.get(f2).popularity;
-            if (pop1 > pop2) return -1;
-            if (pop1 < pop2) return +1;
-            return 0;
+            return Double.compare(pop2, pop1);
         }
 
         public double getCount(Formula f) {
@@ -499,12 +499,12 @@ public final class FbFormulasInfo {
             double score1 = features1.dotProduct(params);
             double score2 = features2.dotProduct(params);
             if (score1 > score2) return -1;
-            if (score1 < score2) return +1;
-            double pop1 = binaryFormulaInfoMap.get(f1).popularity;
-            double pop2 = binaryFormulaInfoMap.get(f2).popularity;
-            if (pop1 > pop2) return -1;
-            if (pop1 < pop2) return +1;
-            return 0;
+            else if (score1 < score2) return +1;
+            else {
+                double pop1 = binaryFormulaInfoMap.get(f1).popularity;
+                double pop2 = binaryFormulaInfoMap.get(f2).popularity;
+                return Double.compare(pop2, pop1);
+            }
         }
     }
 }

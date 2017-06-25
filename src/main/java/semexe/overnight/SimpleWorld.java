@@ -41,7 +41,7 @@ public final class SimpleWorld {
     // Methods exposed to the public.
 
     // en.person.alice => en.person
-    private static String extractType(String id) {
+    private static String typeOf(String id) {
         int i = id.lastIndexOf('.');
         if (id.charAt(i + 1) == '_') { //to deal with /fb:en.lake._st_clair and such
             id = id.substring(0, i);
@@ -50,7 +50,7 @@ public final class SimpleWorld {
         } else return id.substring(0, i);
     }
 
-    private static String getType(Value v) {
+    private static String typeOf(Value v) {
         if (v instanceof NumberValue) {
             String unit = ((NumberValue) v).unit;
             return unit + "_number"; // So we can quickly tell if something is a number or not
@@ -61,9 +61,9 @@ public final class SimpleWorld {
         } else if (v instanceof BooleanValue) {
             return "en.boolean";
         } else if (v instanceof NameValue) {
-            return extractType(((NameValue) v).id);
+            return typeOf(((NameValue) v).id);
         } else if (v instanceof ListValue) {
-            return getType(((ListValue) v).values.get(0));
+            return typeOf(((ListValue) v).values.get(0));
         } else {
             throw new RuntimeException("Can't get type of value " + v);
         }
@@ -73,7 +73,7 @@ public final class SimpleWorld {
     private static void checkTypeMatch(List<Value> l1, List<Value> l2) {
         for (Value o1 : l1) {
             for (Value o2 : l2) {
-                if (!getType(o1).equals(getType(o2)))
+                if (!typeOf(o1).equals(typeOf(o2)))
                     throw new RuntimeException("Intersecting objects with non-matching types, object 1: " +
                             o1 + ", object2: " + o2);
             }
@@ -134,8 +134,8 @@ public final class SimpleWorld {
         String type2 = "?";
         if (type1 == null)
             throw new RuntimeException("Property " + property + " has no type1");
-        if (!getType(e1).equals(type1))
-            throw new RuntimeException("Type check failed: " + property + " : (-> " + type1 + ' ' + type2 + ") doesn't match arg1 " + e1 + " : " + getType(e1));
+        if (!typeOf(e1).equals(type1))
+            throw new RuntimeException("Type check failed: " + property + " : (-> " + type1 + ' ' + type2 + ") doesn't match arg1 " + e1 + " : " + typeOf(e1));
     }
 
     private static void checkType2(String property, Value e2) {
@@ -143,8 +143,8 @@ public final class SimpleWorld {
         String type2 = propertyToType2.get(property);
         if (type2 == null)
             throw new RuntimeException("Property " + property + " has no type2");
-        if (!getType(e2).equals(type2))
-            throw new RuntimeException("Type check failed: " + property + " : (-> " + type1 + ' ' + type2 + ") doesn't match arg2 " + e2 + " : " + getType(e2));
+        if (!typeOf(e2).equals(type2))
+            throw new RuntimeException("Type check failed: " + property + " : (-> " + type1 + ' ' + type2 + ") doesn't match arg2 " + e2 + " : " + typeOf(e2));
     }
 
     private static void ensureNonnumericType2(String property) {
@@ -171,7 +171,7 @@ public final class SimpleWorld {
 
     public static List<Value> ensureNumericEntity(List<Value> list) {
         createWorld();
-        String type = getType(list.get(0));
+        String type = typeOf(list.get(0));
         if (type.endsWith("number") || type.equals("en.date") || type.equals("en.time")) {
             return list;
         }
@@ -487,10 +487,10 @@ public final class SimpleWorld {
         entities.add(e2);
         MapUtils.addToList(database, new Pair(e1, property), e2);
         MapUtils.addToList(database, new Pair(e2, reverse(property)), e1);
-        propertyToType1.put(property, getType(e1));
-        propertyToType2.put(property, getType(e2));
-        propertyToType1.put(reverse(property), getType(e2));
-        propertyToType2.put(reverse(property), getType(e1));
+        propertyToType1.put(property, typeOf(e1));
+        propertyToType2.put(property, typeOf(e2));
+        propertyToType1.put(reverse(property), typeOf(e2));
+        propertyToType2.put(reverse(property), typeOf(e1));
     }
 
     public static void dumpDatabase() {
@@ -629,23 +629,23 @@ public final class SimpleWorld {
     }
 
     // Create |numEntities| entities, the first few have ids.
-    private static List<Value> makeValues(List<String> ids) {
-        return makeValues(ids.size(), ids);
+    private static List<Value> values(List<String> ids) {
+        return values(ids.size(), ids);
     }
 
-    private static List<Value> makeValues(int numEntities, List<String> ids) {
+    private static List<Value> values(int numEntities, List<String> ids) {
         List<Value> values = new ArrayList<Value>();
-        String type = extractType(ids.get(0));
+        String type = typeOf(ids.get(0));
         for (int i = 0; i < numEntities; i++)
-            values.add(makeValue(i < ids.size() ? ids.get(i) : type + '.' + i, type));
+            values.add(value(i < ids.size() ? ids.get(i) : type + '.' + i, type));
         return values;
     }
 
-    private static Value makeValue(String id) {
-        return makeValue(id, extractType(id));
+    private static Value value(String id) {
+        return value(id, typeOf(id));
     }
 
-    private static Value makeValue(String id, String type) {
+    private static Value value(String id, String type) {
         Value e = new NameValue(id);
         if (!entities.contains(e)) {
             insertDB(e, "type", new NameValue(type));
@@ -680,9 +680,9 @@ public final class SimpleWorld {
 
     public static class BlocksDomain extends Domain {
         public void createEntities(int numEntities) {
-            List<Value> blocks = makeValues(numEntities, L("en.block.block1", "en.block.block2"));
-            List<Value> shapes = makeValues(L("en.shape.pyramid", "en.shape.cube"));
-            List<Value> colors = makeValues(L("en.color.red", "en.color.green"));
+            List<Value> blocks = values(numEntities, L("en.block.block1", "en.block.block2"));
+            List<Value> shapes = values(L("en.shape.pyramid", "en.shape.cube"));
+            List<Value> colors = values(L("en.color.red", "en.color.green"));
             for (Value e : blocks) {
                 insertDB(e, "shape", sampleMultinomial(shapes));
                 insertDB(e, "color", sampleMultinomial(colors));
@@ -709,9 +709,9 @@ public final class SimpleWorld {
         }
 
         public void createEntities(int numEntities) {
-            List<Value> meetings = makeValues(numEntities, L("en.meeting.weekly_standup", "en.meeting.annual_review"));
-            List<Value> people = makeValues(L("en.person.alice", "en.person.bob"));
-            List<Value> locations = makeValues(L("en.location.greenberg_cafe", "en.location.central_office"));
+            List<Value> meetings = values(numEntities, L("en.meeting.weekly_standup", "en.meeting.annual_review"));
+            List<Value> people = values(L("en.person.alice", "en.person.bob"));
+            List<Value> locations = values(L("en.location.greenberg_cafe", "en.location.central_office"));
             for (Value e : meetings) {
                 insertDB(e, "date", sampleDate());
                 insertDB(e, "start_time", sampleTime());
@@ -732,10 +732,10 @@ public final class SimpleWorld {
         public static final List<String> NEIGHBORHOODS = Arrays.asList("en.neighborhood.tribeca,en.neighborhood.midtown_west,en.neighborhood.chelsea".split(","));
 
         public void createEntities(int numEntities) {
-            List<Value> restaurants = makeValues(numEntities, L("en.restaurant.thai_cafe", "en.restaurant.pizzeria_juno"));
-            List<Value> neighborhoods = makeValues(NEIGHBORHOODS);
-            List<Value> cuisines = makeValues(RESTAURANT_CUISINES);
-            List<Value> meals = makeValues(RESTAURANT_MEALS);
+            List<Value> restaurants = values(numEntities, L("en.restaurant.thai_cafe", "en.restaurant.pizzeria_juno"));
+            List<Value> neighborhoods = values(NEIGHBORHOODS);
+            List<Value> cuisines = values(RESTAURANT_CUISINES);
+            List<Value> meals = values(RESTAURANT_MEALS);
             for (Value e : restaurants) {
                 insertDB(e, "star_rating", new NumberValue(sampleInt(0, 6), "en.star"));
                 insertDB(e, "price_rating", new NumberValue(sampleInt(1, 5), "en.dollar_sign"));
@@ -757,9 +757,9 @@ public final class SimpleWorld {
         public static final List<String> NEIGHBORHOODS = Arrays.asList("en.neighborhood.tribeca,en.neighborhood.midtown_west,en.neighborhood.chelsea".split(","));
 
         public void createEntities(int numEntities) {
-            List<Value> units = makeValues(numEntities, L("en.housing_unit.123_sesame_street", "en.housing_unit.900_mission_ave"));
-            List<Value> housingTypes = makeValues(HOUSING_TYPES);
-            List<Value> neighborhoods = makeValues(NEIGHBORHOODS);
+            List<Value> units = values(numEntities, L("en.housing_unit.123_sesame_street", "en.housing_unit.900_mission_ave"));
+            List<Value> housingTypes = values(HOUSING_TYPES);
+            List<Value> neighborhoods = values(NEIGHBORHOODS);
             for (Value e : units) {
                 insertDB(e, "rent", new NumberValue((double) sampleMultinomial(L(1500, sampleInt(1000, 3000))), "en.dollar"));
                 insertDB(e, "size", new NumberValue((double) sampleMultinomial(L(800, sampleInt(500, 1500))), "en.square_feet"));
@@ -776,9 +776,9 @@ public final class SimpleWorld {
 
     public static class PublicationDomain extends Domain {
         public void createEntities(int numEntities) {
-            List<Value> articles = makeValues(numEntities, L("en.article.multivariate_data_analysis"));
-            List<Value> people = makeValues(L("en.person.efron", "en.person.lakoff"));
-            List<Value> venues = makeValues(L("en.venue.computational_linguistics", "en.venue.annals_of_statistics"));
+            List<Value> articles = values(numEntities, L("en.article.multivariate_data_analysis"));
+            List<Value> people = values(L("en.person.efron", "en.person.lakoff"));
+            List<Value> venues = values(L("en.venue.computational_linguistics", "en.venue.annals_of_statistics"));
             for (Value e : articles) {
                 insertDB(e, "author", sampleMultinomial(people, 2));
                 insertDB(e, "venue", sampleMultinomial(venues));
@@ -791,14 +791,14 @@ public final class SimpleWorld {
 
     public static class SocialNetworkDomain extends Domain {
         public void createEntities(int numEntities) {
-            List<Value> people = makeValues(numEntities, L("en.person.alice", "en.person.bob"));
-            List<Value> genders = makeValues(L("en.gender.male", "en.gender.female"));
-            List<Value> relationshipStatuses = makeValues(L("en.relationship_status.single", "en.relationship_status.married"));
-            List<Value> cities = makeValues(L("en.city.new_york", "en.city.beijing"));
-            List<Value> universities = makeValues(L("en.university.brown", "en.university.berkeley", "en.university.ucla"));
-            List<Value> fields = makeValues(L("en.field.computer_science", "en.field.economics", "en.field.history"));
-            List<Value> companies = makeValues(L("en.company.google", "en.company.mckinsey", "en.company.toyota"));
-            List<Value> jobTitles = makeValues(L("en.job_title.ceo", "en.job_title.software_engineer", "en.job_title.program_manager"));
+            List<Value> people = values(numEntities, L("en.person.alice", "en.person.bob"));
+            List<Value> genders = values(L("en.gender.male", "en.gender.female"));
+            List<Value> relationshipStatuses = values(L("en.relationship_status.single", "en.relationship_status.married"));
+            List<Value> cities = values(L("en.city.new_york", "en.city.beijing"));
+            List<Value> universities = values(L("en.university.brown", "en.university.berkeley", "en.university.ucla"));
+            List<Value> fields = values(L("en.field.computer_science", "en.field.economics", "en.field.history"));
+            List<Value> companies = values(L("en.company.google", "en.company.mckinsey", "en.company.toyota"));
+            List<Value> jobTitles = values(L("en.job_title.ceo", "en.job_title.software_engineer", "en.job_title.program_manager"));
             for (Value e : people) {
                 insertDB(e, "gender", sampleMultinomial(genders));
                 insertDB(e, "relationship_status", sampleMultinomial(relationshipStatuses));
@@ -809,14 +809,14 @@ public final class SimpleWorld {
                 if (sampleBernoulli(0.5))
                     insertDB(e, "logged_in");
             }
-            for (Value e : makeValues(numEntities, L("en.education.0"))) {
+            for (Value e : values(numEntities, L("en.education.0"))) {
                 insertDB(e, "student", focusSampleMultinomial(people));
                 insertDB(e, "university", sampleMultinomial(universities));
                 insertDB(e, "field_of_study", sampleMultinomial(fields));
                 insertDB(e, "education_start_date", sampleDate());
                 insertDB(e, "education_end_date", sampleDate());
             }
-            for (Value e : makeValues(numEntities, L("en.employment.0"))) {
+            for (Value e : values(numEntities, L("en.employment.0"))) {
                 insertDB(e, "employee", focusSampleMultinomial(people));
                 insertDB(e, "employer", sampleMultinomial(companies));
                 insertDB(e, "job_title", sampleMultinomial(jobTitles));
@@ -828,10 +828,10 @@ public final class SimpleWorld {
 
     public static class BasketballDomain extends Domain {
         public void createEntities(int numEntities) {
-            List<Value> players = makeValues(numEntities, L("en.player.kobe_bryant", "en.player.lebron_james"));
-            List<Value> teams = makeValues(L("en.team.lakers", "en.team.cavaliers"));
-            List<Value> positions = makeValues(L("en.position.point_guard", "en.position.forward"));
-            for (Value e : makeValues(numEntities, L("en.stats.0"))) {
+            List<Value> players = values(numEntities, L("en.player.kobe_bryant", "en.player.lebron_james"));
+            List<Value> teams = values(L("en.team.lakers", "en.team.cavaliers"));
+            List<Value> positions = values(L("en.position.point_guard", "en.position.forward"));
+            for (Value e : values(numEntities, L("en.stats.0"))) {
                 insertDB(e, "player", focusSampleMultinomial(players));
                 insertDB(e, "position", sampleMultinomial(positions));
                 insertDB(e, "team", sampleMultinomial(teams));
@@ -851,10 +851,10 @@ public final class SimpleWorld {
 
     public static class RecipesDomain extends Domain {
         public void createEntities(int numEntities) {
-            List<Value> recipes = makeValues(numEntities, L("en.recipe.rice_pudding", "en.recipe.quiche"));
-            List<Value> cuisines = makeValues(L("en.cuisine.chinese", "en.cuisine.french"));
-            List<Value> ingredients = makeValues(L("en.ingredient.milk", "en.ingredient.spinach"));
-            List<Value> meals = makeValues(L("en.meal.lunch", "en.meal.dinner"));
+            List<Value> recipes = values(numEntities, L("en.recipe.rice_pudding", "en.recipe.quiche"));
+            List<Value> cuisines = values(L("en.cuisine.chinese", "en.cuisine.french"));
+            List<Value> ingredients = values(L("en.ingredient.milk", "en.ingredient.spinach"));
+            List<Value> meals = values(L("en.meal.lunch", "en.meal.dinner"));
             for (Value e : recipes) {
                 insertDB(e, "preparation_time", new NumberValue(sampleInt(5, 30), "en.minute"));
                 insertDB(e, "cooking_time", new NumberValue(sampleInt(5, 30), "en.minute"));
@@ -877,13 +877,13 @@ public final class SimpleWorld {
                         .lines().forEach(line -> {
                     String[] tokens = line.split("\t");
                     String pred = tokens[0];
-                    Value e = makeValue(tokens[1]);
+                    Value e = value(tokens[1]);
                     if (tokens.length == 2) { // Unary
                         insertDB(e, pred);
                     } else if (tokens.length == 3) {  // Binary
                         Value f;
                         if (tokens[2].startsWith("fb:en."))  // Named entity
-                            f = makeValue(tokens[2]);
+                            f = value(tokens[2]);
                         else
                             f = Value.fromString(tokens[2]);  // Number
                         insertDB(e, pred, f);

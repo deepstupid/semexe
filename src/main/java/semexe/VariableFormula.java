@@ -21,6 +21,7 @@ public class VariableFormula extends PrimitiveFormula {
     @SuppressWarnings({"equalshashcode"})
     @Override
     public boolean equals(Object thatObj) {
+        if (this == thatObj) return true;
         if (!(thatObj instanceof VariableFormula)) return false;
         VariableFormula that = (VariableFormula) thatObj;
         return this.name.equals(that.name);

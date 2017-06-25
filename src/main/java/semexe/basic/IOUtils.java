@@ -270,7 +270,7 @@ public class IOUtils {
     public static PrintWriter openOut(File path) throws IOException {
         OutputStream os = new FileOutputStream(path);
         if (path.getName().endsWith(".gz")) os = new GZIPOutputStream(os);
-        return new PrintWriter(CharEncUtils.getWriter(os));
+        return CharEncUtils.getWriter(os);
     }
 
     public static PrintWriter openOutEasy(String path) {

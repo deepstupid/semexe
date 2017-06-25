@@ -98,7 +98,9 @@ public class FileStringCache implements StringCache, LruCallback<String, String>
 
         PrintWriter dumpOut = IOUtils.openOutHard(this.path + ".tmp");
         for (Map.Entry<String, String> entry : cache.entrySet()) {
-            dumpOut.println(entry.getKey() + '\t' + entry.getValue());
+            dumpOut.print(entry.getKey());
+            dumpOut.print('\t');
+            dumpOut.println(entry.getValue());
         }
         dumpOut.flush();
         dumpOut.close();
