@@ -297,7 +297,7 @@ addMode('freebase', 'Freebase (for EMNLP 2013, ACL 2014, TACL 2014)', lambda { |
   nil),
   sel(:interact, l()),
   freebaseHeader,
-  'edu.stanford.nlp.sempre.Main',
+  'Main',
   freebaseOpts,
 
   # Dataset
@@ -335,7 +335,7 @@ addMode('freebase', 'Freebase (for EMNLP 2013, ACL 2014, TACL 2014)', lambda { |
 addMode('cacheserver', 'Start the general-purpose cache server that serves files with key-value maps', lambda { |e|
   l(
     'java', '-Xmx36g', '-ea', '-cp', 'libsempre/*:lib/fig.jar',
-    'edu.stanford.nlp.sempre.cache.StringCacheServer',
+    'StringCacheServer',
     letDefault(:port, 4000),
     lambda { |e| o('port', e[:port]) },
 
@@ -368,7 +368,7 @@ addMode('filterfreebase', '(1) Filter RDF Freebase dump (do this once) [takes ab
   l(
     'fig/bin/qcreate', o('statePath', lambda{|e| e[:scr] + '/state'}),
     'java', '-ea', '-Xmx20g', '-cp', 'libsempre/*:lib/*',
-    'edu.stanford.nlp.sempre.freebase.FilterFreebase',
+    'FilterFreebase',
     o('inPath', '/u/nlp/data/semparse/scr/freebase/freebase-rdf-2013-06-09-00-00.canonicalized'),
     sel(:keep, {
       'all' => o('keepAllProperties'),
@@ -423,7 +423,7 @@ nil) })
 addMode('convertfree917', 'Convert the Free917 dataset', lambda { |e| l(
   'java', '-ea', '-Xmx15g',
   '-cp', 'libsempre/*:lib/*',
-  'edu.stanford.nlp.sempre.freebase.Free917Converter',
+  'Free917Converter',
   o('inDir','/u/nlp/data/semparse/yates/final-dataset-acl-2013-all/'),
   o('outDir','data/free917_convert/'),
   o('entityInfoFile','/user/joberant/scr/fb_data/3/entityInfo.txt'),
@@ -435,7 +435,7 @@ addMode('query', 'Query a single logical form or SPARQL', lambda { |e| l(
   codalab,
   'java', '-ea',
   '-cp', 'libsempre/*:lib/*',
-  'edu.stanford.nlp.sempre.freebase.SparqlExecutor',
+  'SparqlExecutor',
   sparqlOpts,
 nil) })
 
@@ -444,19 +444,19 @@ nil) })
 
 # Just start a simple interactive shell to try out SEMPRE commands
 addMode('simple', 'Simple shell', lambda { |e| l(
-  codalab, 'java', '-cp', 'libsempre/*:lib/*', '-ea', 'edu.stanford.nlp.sempre.Main',
+  codalab, 'java', '-cp', 'libsempre/*:lib/*', '-ea', 'Main',
   o('Main.interactive'),
 nil) })
 
 addMode('simple-sparql', 'Simple shell for querying SPARQL', lambda { |e| l(
-  codalab, 'java', '-Dmodules=core,freebase', '-cp', 'libsempre/*:lib/*', '-ea', 'edu.stanford.nlp.sempre.Main',
+  codalab, 'java', '-Dmodules=core,freebase', '-cp', 'libsempre/*:lib/*', '-ea', 'Main',
   o('executor', 'freebase.SparqlExecutor'),
   sparqlOpts,
   o('Main.interactive'),
 nil) })
 
 addMode('simple-lambdadcs', 'Simple shell for querying with the LambdaDCSExecutor', lambda { |e| l(
-  codalab, 'java', '-Dmodules=core,tables,corenlp', '-cp', 'libsempre/*:lib/*', '-ea', 'edu.stanford.nlp.sempre.Main',
+  codalab, 'java', '-Dmodules=core,tables,corenlp', '-cp', 'libsempre/*:lib/*', '-ea', 'Main',
   o('executor', 'tables.lambdadcs.LambdaDCSExecutor'),
   o('FeatureExtractor.featureDomains', 'denotation lexAlign joinPos skipPos'.split),
   o('LanguageAnalyzer.languageAnalyzer', 'corenlp.CoreNLPAnalyzer'),
@@ -464,7 +464,7 @@ addMode('simple-lambdadcs', 'Simple shell for querying with the LambdaDCSExecuto
 nil) })
 
 addMode('simple-freebase', 'Simple shell for using Freebase', lambda { |e| l(
-  'java', '-Dmodules=core,freebase', '-cp', 'libsempre/*:lib/*', '-ea', 'edu.stanford.nlp.sempre.Main',
+  'java', '-Dmodules=core,freebase', '-cp', 'libsempre/*:lib/*', '-ea', 'Main',
   o('executor', 'freebase.SparqlExecutor'),
   letDefault(:sparqlserver, 'freebase.cloudapp.net:3093'),
   letDefault(:cacheserver, 'freebase.cloudapp.net:4000'),
@@ -490,7 +490,7 @@ addMode('simple-freebase', 'Simple shell for using Freebase', lambda { |e| l(
 nil) })
 
 addMode('simple-freebase-nocache', 'Simple shell for using Freebase (without a cache server)', lambda { |e| l(
-  'java', '-Dmodules=core,freebase', '-cp', 'libsempre/*:lib/*', '-ea', 'edu.stanford.nlp.sempre.Main',
+  'java', '-Dmodules=core,freebase', '-cp', 'libsempre/*:lib/*', '-ea', 'Main',
   o('executor', 'freebase.SparqlExecutor'),
   letDefault(:sparqlserver, 'freebase.cloudapp.net:3093'),
   sparqlOpts,
@@ -524,7 +524,7 @@ end
 
 addMode('overnight', 'Overnight semantic parsing', l(
   header('core,freebase,overnight'),
-  'edu.stanford.nlp.sempre.Main',
+  'Main',
   figOpts,
   o('JavaExecutor.convertNumberValues', false),
   o('useAnchorsOnce', true),
@@ -589,7 +589,7 @@ addMode('overnight', 'Overnight semantic parsing', l(
       o('Parser.beamSize', 20),
       o('initialization', 'paraphrase :: match,1', 'paraphrase :: size,-0.1', 'paraphrase :: ppdb,0.3',
           'lf :: edu.stanford.nlp.sempre.SimpleWorld.superlative& superlative,10',
-          'root :: pos0=WRB&returnType=class edu.stanford.nlp.sempre.NumberValue,10'),
+          'root :: pos0=WRB&returnType=class NumberValue,10'),
       o('FloatingParser.maxDepth', 11),
       o('Grammar.tags','generate','general', 'geo880'),
       o('SimpleLexicon.inPaths', 'lib/data/overnight/geo880.lexicon'),
@@ -638,17 +638,17 @@ addMode('tables', 'QA on HTML tables', lambda { |e| l(
   # Select class
   letDefault(:class, 'main'),
   sel(:class, {
-    'main' => 'edu.stanford.nlp.sempre.Main',
-    'check' => 'edu.stanford.nlp.sempre.tables.test.DPDParserChecker',
-    'dump' => 'edu.stanford.nlp.sempre.tables.serialize.SerializedDumper',
-    'load' => l('edu.stanford.nlp.sempre.tables.serialize.SerializedLoader', let(:parser, 'serialized')),
-    'stats' => 'edu.stanford.nlp.sempre.tables.test.TableStatsComputer',
-    'tag-data' => 'edu.stanford.nlp.sempre.tables.serialize.TaggedDatasetGenerator',
-    'tag-table' => 'edu.stanford.nlp.sempre.tables.serialize.TaggedTableGenerator',
-    'tag-fuzzy' => 'edu.stanford.nlp.sempre.tables.serialize.TaggedFuzzyGenerator',
-    'alter' => l('edu.stanford.nlp.sempre.tables.alter.BatchTableAlterer', let(:parser, 'serialized')),
-    'alter-ex' => l('edu.stanford.nlp.sempre.tables.alter.AlteredTablesExecutor', let(:parser, 'serialized')),
-    'filter' => 'edu.stanford.nlp.sempre.tables.serialize.DumpFilterer',
+    'main' => 'Main',
+    'check' => 'DPDParserChecker',
+    'dump' => 'SerializedDumper',
+    'load' => l('SerializedLoader', let(:parser, 'serialized')),
+    'stats' => 'TableStatsComputer',
+    'tag-data' => 'TaggedDatasetGenerator',
+    'tag-table' => 'TaggedTableGenerator',
+    'tag-fuzzy' => 'TaggedFuzzyGenerator',
+    'alter' => l('BatchTableAlterer', let(:parser, 'serialized')),
+    'alter-ex' => l('AlteredTablesExecutor', let(:parser, 'serialized')),
+    'filter' => 'DumpFilterer',
   }),
   # Fig parameters
   selo(:cldir, 'execDir', '_OUTPATH_', '.'),
@@ -943,7 +943,7 @@ addMode('genovernight', 'Generate utterances for overnight semantic parsing', la
   'fig/bin/qcreate',
   letDefault(:gen, 0),
   sel(:gen, l()),
-  'java', '-Dmodules=core,overnight', '-Xmx10g', '-cp', 'libsempre/*:lib/*', '-ea', 'edu.stanford.nlp.sempre.overnight.GenerationMain',
+  'java', '-Dmodules=core,overnight', '-Xmx10g', '-cp', 'libsempre/*:lib/*', '-ea', 'GenerationMain',
   figOpts,
   o('JoinFn.typeInference', true),
   o('JoinFn.specializedTypeCheck', false),
@@ -1004,7 +1004,7 @@ nil) })
 addMode('geo880', 'Semantic parsing on the geo880 dataset', lambda { |e| l(
   # Usual header
   header('core,tables,corenlp,geo880'),
-  'edu.stanford.nlp.sempre.Main',
+  'Main',
   # Fig parameters
   figOpts,
   o('executor', 'tables.lambdadcs.LambdaDCSExecutor'),

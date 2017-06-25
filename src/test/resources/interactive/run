@@ -104,7 +104,7 @@ addMode('test', 'Run unit tests for interactive stuff', lambda { |e|
 addMode('simulator', 'run the simulator', lambda { |e| l(
   # rlwrap,
   header('core,interactive'),
-  'edu.stanford.nlp.sempre.interactive.Simulator',
+  'Simulator',
   figOpts,
   letDefault(:server, 'local'),
   sel(:server, {
@@ -139,10 +139,10 @@ nil)})
 addMode('voxelurn', 'interactive semantic parsing in a VoxelWorld', lambda { |e| l(
   #rlwrap,
   header('core,interactive'),
-  'edu.stanford.nlp.sempre.Main',
+  'Main',
   #figOpts,
   o('server'),
-  o('masterType', 'edu.stanford.nlp.sempre.interactive.InteractiveMaster'),
+  o('masterType', 'InteractiveMaster'),
   o('Executor', 'interactive.DALExecutor'),
   o('LanguageAnalyzer', 'interactive.DALAnalyzer'),
   o('DALExecutor.convertNumberValues', true),
@@ -223,10 +223,10 @@ nil) })
 addMode('datavis', 'interactive semantic parsing for data visualization', lambda { |e| l(
   #rlwrap,
   header('core,interactive'),
-  'edu.stanford.nlp.sempre.Main',
+  'Main',
   #figOpts,
   o('server'),
-  o('masterType', 'edu.stanford.nlp.sempre.interactive.InteractiveMaster'),
+  o('masterType', 'InteractiveMaster'),
   o('Executor', 'interactive.TranscompileExecutor'),
   o('LanguageAnalyzer', 'interactive.DALAnalyzer'),
   selo(0, 'Grammar.inPaths', "./#{$path}/datavis.grammar"),

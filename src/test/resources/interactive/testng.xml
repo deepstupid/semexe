@@ -3,12 +3,12 @@
 <suite name="SempreInteractiveTestSuite" verbose="10">
   <test name="InteractiveTests">
     <classes>
-      <class name="edu.stanford.nlp.sempre.interactive.test.GrammarInducerTest">
+      <class name="semexe.interactive.test.GrammarInducerTest">
       </class>
-			<class name="edu.stanford.nlp.sempre.interactive.test.DALExecutorTest">
+			<class name="semexe.interactive.test.DALExecutorTest">
       </class>
 			<!--
-			<class name="edu.stanford.nlp.sempre.interactive.test.FloatingParsingTest">
+			<class name="FloatingParsingTest">
 			</class>
 			-->
     </classes>

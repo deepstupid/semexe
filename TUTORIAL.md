@@ -33,7 +33,7 @@ shell command and executes it.  To see which command is run, do:
 
 This should print out:
 
-    java -cp libsempre/*:lib/* -ea edu.stanford.nlp.sempre.Main -Main.interactive
+    java -cp libsempre/*:lib/* -ea Main -Main.interactive
 
 You can pass in additional options:
 

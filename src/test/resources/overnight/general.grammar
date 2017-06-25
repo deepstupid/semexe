@@ -4,21 +4,21 @@
 # - generate: used to generate canonical utterances
 # - parse: used to actually parse
 
-(def @domain edu.stanford.nlp.sempre.overnight.SimpleWorld.domain)
-(def @singleton edu.stanford.nlp.sempre.overnight.SimpleWorld.singleton)
-(def @filter edu.stanford.nlp.sempre.overnight.SimpleWorld.filter)
-(def @getProperty edu.stanford.nlp.sempre.overnight.SimpleWorld.getProperty)
-(def @superlative edu.stanford.nlp.sempre.overnight.SimpleWorld.superlative)
-(def @countSuperlative edu.stanford.nlp.sempre.overnight.SimpleWorld.countSuperlative)
-(def @countComparative edu.stanford.nlp.sempre.overnight.SimpleWorld.countComparative)
-(def @aggregate edu.stanford.nlp.sempre.overnight.SimpleWorld.aggregate)
-(def @concat edu.stanford.nlp.sempre.overnight.SimpleWorld.concat)
-(def @reverse edu.stanford.nlp.sempre.overnight.SimpleWorld.reverse)
-(def @arithOp edu.stanford.nlp.sempre.overnight.SimpleWorld.arithOp)
-(def @sortAndToString edu.stanford.nlp.sempre.overnight.SimpleWorld.sortAndToString)
-(def @ensureNumericProperty edu.stanford.nlp.sempre.overnight.SimpleWorld.ensureNumericProperty)
-(def @ensureNumericEntity edu.stanford.nlp.sempre.overnight.SimpleWorld.ensureNumericEntity)
-(def @listValue edu.stanford.nlp.sempre.overnight.SimpleWorld.listValue)
+(def @domain SimpleWorld.domain)
+(def @singleton SimpleWorld.singleton)
+(def @filter SimpleWorld.filter)
+(def @getProperty SimpleWorld.getProperty)
+(def @superlative SimpleWorld.superlative)
+(def @countSuperlative SimpleWorld.countSuperlative)
+(def @countComparative SimpleWorld.countComparative)
+(def @aggregate SimpleWorld.aggregate)
+(def @concat SimpleWorld.concat)
+(def @reverse SimpleWorld.reverse)
+(def @arithOp SimpleWorld.arithOp)
+(def @sortAndToString SimpleWorld.sortAndToString)
+(def @ensureNumericProperty SimpleWorld.ensureNumericProperty)
+(def @ensureNumericEntity SimpleWorld.ensureNumericEntity)
+(def @listValue SimpleWorld.listValue)
 
 ############################################################
 # Base cases

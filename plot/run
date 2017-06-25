@@ -80,7 +80,7 @@ addMode('test', 'Run unit tests for interactive stuff', lambda { |e|
 addMode('plot', 'interactive semantic parsing for plotting', lambda { |e| l(
   #rlwrap,
   header('core,interactive'),
-  'edu.stanford.nlp.sempre.Main',
+  'Main',
   #figOpts,
   o('server'),
   o('masterType', 'edu.stanford.nlp.sempre.interactive.JsonMaster'),
